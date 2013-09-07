@@ -60,12 +60,16 @@
   , show: function () {
       var pos = $.extend({}, this.$element.position(), {
         height: this.$element[0].offsetHeight
-      })
+      }), scrollHeight
+      
+      scrollHeight = typeof this.options.scrollHeight == 'function' ?
+          this.options.scrollHeight.call() :
+          this.options.scrollHeight
 
       this.$menu
         .insertAfter(this.$element)
         .css({
-          top: pos.top + pos.height
+          top: pos.top + pos.height + scrollHeight
         , left: pos.left
         })
         .show()
@@ -311,6 +315,7 @@
   , menu: '<ul class="typeahead dropdown-menu"></ul>'
   , item: '<li><a href="#"></a></li>'
   , minLength: 1
+  , scrollHeight: 0 
   }
 
   $.fn.typeahead.Constructor = Typeahead

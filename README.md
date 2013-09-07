@@ -78,6 +78,12 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>1</td>
                  <td>The minimum character length needed before triggering autocomplete suggestions</td>
                </tr>
+              <tr>
+                 <td>scrollHeight</td>
+                 <td>number, function</td>
+                 <td>0</td>
+                 <td>Number of pixels the scollable parent container scrolled down (scrolled out the viewport)</td>
+               </tr>
                <tr>
                  <td>matcher</td>
                  <td>function</td>
