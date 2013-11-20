@@ -39,7 +39,8 @@
     this.source = this.options.source
     this.$menu = $(this.options.menu)
     this.shown = false
-    this.listen()
+    this.listen(),
+    this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false
   }
 
   Typeahead.prototype = {
@@ -90,9 +91,9 @@
   , lookup: function (event) {
       var items
 
-      this.query = this.$element.val()
+      this.query = this.$element.val()  || ''
 
-      if (!this.query || this.query.length < this.options.minLength) {
+      if (this.query.length < this.options.minLength) {
         return this.shown ? this.hide() : this
       }
 
@@ -114,7 +115,11 @@
         return this.shown ? this.hide() : this
       }
 
-      return this.render(items.slice(0, this.options.items)).show()
+      if (this.options.items == 'all' || this.options.minLength == 0 && !this.$element.val()) {
+        return this.render(items).show()
+      } else {	
+        return this.render(items.slice(0, this.options.items)).show()
+      }
     }
 
   , matcher: function (item) {
@@ -271,6 +276,9 @@
 
   , focus: function (e) {
       this.focused = true
+      if (this.options.minLength == 0 && !this.$element.val() || this.options.matchOnFocus) {
+        this.lookup(); 
+      }
     }
 
   , blur: function (e) {
