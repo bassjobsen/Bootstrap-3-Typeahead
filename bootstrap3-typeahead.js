@@ -276,7 +276,7 @@
 
   , focus: function (e) {
       this.focused = true
-      if (this.options.minLength == 0 && !this.$element.val() || this.options.matchOnFocus) {
+      if (this.options.minLength == 0 && !this.$element.val() || this.options.showHintOnFocus) {
         this.lookup(); 
       }
     }
