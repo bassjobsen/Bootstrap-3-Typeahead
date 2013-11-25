@@ -24,7 +24,7 @@ Build your own version with typeahead with `grunt dist`.
 
 CSS
 ===
-There is no additional css required to use the plugin. Bootstrap's css contains all required styles in the `.dropdownmenu` class. The original CSS add a `z-index` of 1051 to the dropdownmenu via the typeahead class. You could add this if you need it.
+There is no additional css required to use the plugin. Bootstrap's css contains all required styles in the `.dropdown-menu` class. The original CSS add a `z-index` of 1051 to the dropdownmenu via the typeahead class. You could add this if you need it.
 `.typeahead { z-index: 1051;}` (less or css).
 
 Usage
