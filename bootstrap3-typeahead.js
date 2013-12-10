@@ -40,13 +40,13 @@
     this.$menu = $(this.options.menu)
     this.shown = false
     this.listen(),
-    this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false
+	this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false
   }
 
   Typeahead.prototype = {
 
     constructor: Typeahead
-
+	
   , select: function () {
       var val = this.$menu.find('.active').attr('data-value')
       if(this.autoSelect || val) {
@@ -60,6 +60,10 @@
   , updater: function (item) {
       return item
     }
+
+  , setSource: function (source) {
+      this.source = source;
+    }	
 
   , show: function () {
       var pos = $.extend({}, this.$element.position(), {
@@ -88,10 +92,13 @@
       return this
     }
 
-  , lookup: function (event) {
-      var items
-
-      this.query = this.$element.val()  || ''
+  , lookup: function (query) {
+      var items      
+	  if (typeof(query) != 'undefined' && query != null) {
+		this.query = query;
+	  } else {
+		this.query = this.$element.val() ||  '';
+	  }
 
       if (this.query.length < this.options.minLength) {
         return this.shown ? this.hide() : this
@@ -114,12 +121,12 @@
       if (!items.length) {
         return this.shown ? this.hide() : this
       }
-
-      if (this.options.items == 'all' || this.options.minLength == 0 && !this.$element.val()) {
-        return this.render(items).show()
-      } else {	
-        return this.render(items.slice(0, this.options.items)).show()
-      }
+	  
+	  if (this.options.items == 'all' || this.options.minLength == 0 && !this.$element.val()) {
+		return this.render(items).show()
+	  } else {	
+		return this.render(items.slice(0, this.options.items)).show()
+	  }
     }
 
   , matcher: function (item) {
@@ -237,8 +244,12 @@
     }
 
   , keydown: function (e) {
-      this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27])
-      this.move(e)
+      this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27]);
+	  if (!this.shown && e.keyCode == 40) {
+		this.lookup("");
+	  } else {
+		this.move(e)
+	  }
     }
 
   , keypress: function (e) {
@@ -247,8 +258,8 @@
     }
 
   , keyup: function (e) {
-      switch(e.keyCode) {
-        case 40: // down arrow
+      switch(e.keyCode) {  
+		case 40: // down arrow      
         case 38: // up arrow
         case 16: // shift
         case 17: // ctrl
@@ -264,8 +275,7 @@
         case 27: // escape
           if (!this.shown) return
           this.hide()
-          break
-
+          break		
         default:
           this.lookup()
       }
@@ -275,10 +285,12 @@
   }
 
   , focus: function (e) {
-      this.focused = true
-      if (this.options.minLength == 0 && !this.$element.val() || this.options.matchOnFocus) {
-        this.lookup(); 
-      }
+	  if (!this.focused) {
+		  this.focused = true
+		  if (this.options.minLength == 0 && !this.$element.val() || this.options.showHintOnFocus) {
+			this.lookup(); 
+		  }
+	  }
     }
 
   , blur: function (e) {
@@ -313,12 +325,19 @@
   var old = $.fn.typeahead
 
   $.fn.typeahead = function (option) {
+	var arg = arguments;
     return this.each(function () {
       var $this = $(this)
         , data = $this.data('typeahead')
         , options = typeof option == 'object' && option
       if (!data) $this.data('typeahead', (data = new Typeahead(this, options)))
-      if (typeof option == 'string') data[option]()
+      if (typeof option == 'string') {
+		if (arg.length > 1) {
+			data[option].apply(data, Array.prototype.slice.call(arg ,1));
+		} else {
+			data[option]()
+		}
+	  }
     })
   }
 
