@@ -70,7 +70,7 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>items</td>
                  <td>number</td>
                  <td>8</td>
-                 <td>The max number of items to display in the dropdown.</td>
+                 <td>The max number of items to display in the dropdown. Can also be set to 'all'</td>
                </tr>
                <tr>
                  <td>minLength</td>
@@ -121,6 +121,7 @@ Methods
 =======
 
 	.typeahead(options)
+	.lookup: To trigger the lookup function externally
 
 Initializes an input with a typeahead.
 
