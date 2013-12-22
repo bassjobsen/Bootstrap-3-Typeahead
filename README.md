@@ -131,4 +131,18 @@ Methods
 
 Initializes an input with a typeahead.
 
+Bower
+=====
+
+To use with [Bower](http://bower.io/). Add to your bower.json file:
+
+
+	{
+            "name": "MyProject",
+            "dependencies": {
+            "bootstrap3-typeahead": "git@github.com:bassjobsen/Bootstrap-3-Typeahead.git#master"
+            }
+       }
+
+
  
