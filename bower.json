@@ -1,0 +1,20 @@
+{
+  "name": "bootstrap3-typeahead",
+  "version": "3.0.0",
+  "authors": [
+    "bassjobsen"
+  ],
+  "main": [
+    "bootstrap3-typeahead.js"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": ">=1.7.0"
+  }
+}
