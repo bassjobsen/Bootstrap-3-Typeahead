@@ -209,8 +209,21 @@
         .on('click', $.proxy(this.click, this))
         .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
         .on('mouseleave', 'li', $.proxy(this.mouseleave, this))
-    }
+	}
+  , destroy : function () {
+		   this.$element.data('typeahead',null)
+			this.$element
+			.off('focus')
+			.off('blur')
+			.off('keypress')
+			.off('keyup')
 
+		  if (this.eventSupported('keydown')) {
+			this.$element.off('keydown')
+		  }
+
+		  this.$menu.remove();
+	}	
   , eventSupported: function(eventName) {
       var isSupported = eventName in this.$element
       if (!isSupported) {
@@ -286,6 +299,7 @@
   }
 
   , focus: function (e) {
+	  console.log('focus');
 	  if (!this.focused) {
 		  this.focused = true
 		  if (this.options.minLength == 0 && !this.$element.val() || this.options.showHintOnFocus) {
