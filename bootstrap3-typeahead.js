@@ -1,10 +1,10 @@
 /* =============================================================
- * bootstrap3-typeahead.js v3.0
+ * bootstrap3-typeahead.js v3.0.3
  * https://github.com/bassjobsen/Bootstrap-3-Typeahead
  * =============================================================
  * Original written by @mdo and @fat
  * =============================================================
- * Copyright 2013 Bass Jobsen @bassjobsen
+ * Copyright 2014 Bass Jobsen @bassjobsen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
