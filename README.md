@@ -45,6 +45,10 @@ Call the typeahead manually with:
 
 	$('.typeahead').typeahead()
 
+Destroys previously initialized typeaheads. This entails reverting DOM modifications and removing event handlers:	
+	
+	$('.typeahead').typeahead('destroy')
+
 Options
 =======
 

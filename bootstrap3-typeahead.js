@@ -1,10 +1,10 @@
 /* =============================================================
- * bootstrap3-typeahead.js v3.0
+ * bootstrap3-typeahead.js v3.0.3
  * https://github.com/bassjobsen/Bootstrap-3-Typeahead
  * =============================================================
  * Original written by @mdo and @fat
  * =============================================================
- * Copyright 2013 Bass Jobsen @bassjobsen
+ * Copyright 2014 Bass Jobsen @bassjobsen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -210,8 +210,21 @@
         .on('click', $.proxy(this.click, this))
         .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
         .on('mouseleave', 'li', $.proxy(this.mouseleave, this))
-    }
+	}
+  , destroy : function () {
+		   this.$element.data('typeahead',null)
+			this.$element
+			.off('focus')
+			.off('blur')
+			.off('keypress')
+			.off('keyup')
 
+		  if (this.eventSupported('keydown')) {
+			this.$element.off('keydown')
+		  }
+
+		  this.$menu.remove();
+	}	
   , eventSupported: function(eventName) {
       var isSupported = eventName in this.$element
       if (!isSupported) {
@@ -287,6 +300,7 @@
   }
 
   , focus: function (e) {
+	  console.log('focus');
 	  if (!this.focused) {
 		  this.focused = true
 		  if (this.options.minLength == 0 && !this.$element.val() || this.options.showHintOnFocus) {
