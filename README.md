@@ -13,7 +13,7 @@ With Twitter Bootstrap 3 the typeahead plugin had been dropped. [@mdo](http://tw
 Download
 ========
 
- - Download the latest [bootstrap3-typeahead.js](https://github.com/bassjobsen/Bootstrap-3-Typeahead/blob/master/bootstrap3-typeahead.js) or [bootstrap3-typeahead.min.js](https://github.com/bassjobsen/Bootstrap-3-Typeahead/blob/master/boostrap3-typeahead.min.js).
+ - Download the latest [bootstrap3-typeahead.js](https://github.com/bassjobsen/Bootstrap-3-Typeahead/blob/master/bootstrap3-typeahead.js) or [bootstrap3-typeahead-min.js](https://github.com/bassjobsen/Bootstrap-3-Typeahead/blob/master/boostrap3-typeahead-min.js).
 
  - Include it in your source after jQuery and Bootstrap Javascript.
  
