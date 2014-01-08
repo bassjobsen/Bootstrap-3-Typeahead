@@ -49,7 +49,7 @@ Destroys previously initialized typeaheads. This entails reverting DOM modificat
 	
 	$('.typeahead').typeahead('destroy')
 
-Usage Example
+Javascript Example
 =============
 
 Loading a collection
