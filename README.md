@@ -49,6 +49,18 @@ Destroys previously initialized typeaheads. This entails reverting DOM modificat
 	
 	$('.typeahead').typeahead('destroy')
 
+Usage Example
+=============
+
+Loading a collection
+--------------------
+
+	$.get('example_collection.json', function(data){
+		$("#name").typeahead({ source:data });
+	},'json');
+	//example_collection.json
+	// ["item1","item2","item3]
+
 Options
 =======
 
