@@ -299,7 +299,6 @@
   }
 
   , focus: function (e) {
-	  console.log('focus');
 	  if (!this.focused) {
 		  this.focused = true
 		  if (this.options.minLength == 0 && !this.$element.val() || this.options.showHintOnFocus) {
