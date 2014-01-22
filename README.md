@@ -131,7 +131,7 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>Method used to highlight autocomplete results. Accepts a single argument <code>item</code> and has the scope of the typeahead instance. Should return html.</td>
                </tr>
               <tr>
-                 <td>autoselect</td>
+                 <td>autoSelect</td>
                  <td>boolean</td>
                  <td>true</td>
                  <td>Allows you to dictate whether or not the first suggestion is selected automatically. Turning autoselect off also means that the input won't clear if nothing is selected and <kbd>enter</kbd> or <kbd>tab</kbd> is hit.</td>
