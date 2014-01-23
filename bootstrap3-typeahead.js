@@ -41,6 +41,7 @@
     this.source = this.options.source;
     this.$menu = $(this.options.menu);
     this.shown = false;
+    this.is_strings = false;
     this.listen();
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false;
   };
@@ -50,7 +51,7 @@
     constructor: Typeahead
 
   , select: function () {
-      var val = this.$menu.find('.active').attr('data-value');
+      var val = this.$menu.find('.active').data('value');
       if(this.autoSelect || val) {
         this.$element
           .val(this.updater(val))
@@ -60,12 +61,15 @@
     }
 
   , updater: function (item) {
+      if (!this.is_strings) {
+        return item[this.options.property]
+      }
       return item;
     }
 
   , setSource: function (source) {
       this.source = source;
-    }	
+    }
 
   , show: function () {
       var pos = $.extend({}, this.$element.position(), {
@@ -112,9 +116,16 @@
     }
 
   , process: function (items) {
+
       var that = this;
 
+      if (items.length && typeof items[0] != "string")
+        this.is_strings = false;
+
       items = $.grep(items, function (item) {
+        if (!that.is_strings)
+          item = item[that.options.property];
+
         return that.matcher(item);
       });
 
@@ -139,11 +150,18 @@
       var beginswith = []
         , caseSensitive = []
         , caseInsensitive = []
-        , item;
+        , item
+        , sortby;
 
       while ((item = items.shift())) {
-        if (!item.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
-        else if (~item.indexOf(this.query)) caseSensitive.push(item);
+        if (this.is_strings) {
+            sortby = item;
+        } else {
+            sortby = item[this.options.property];
+        }
+
+        if (!sortby.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
+        else if (~sortby.indexOf(this.query)) caseSensitive.push(item);
         else caseInsensitive.push(item);
       }
 
@@ -161,7 +179,10 @@
       var that = this;
 
       items = $(items).map(function (i, item) {
-        i = $(that.options.item).attr('data-value', item);
+        i = $(that.options.item).data('value', item);
+        if (!that.is_strings) {
+            item = item[that.options.property];
+        }
         i.find('a').html(that.highlighter(item));
         return i[0];
       });
