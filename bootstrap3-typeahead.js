@@ -65,13 +65,13 @@
 
   , setSource: function (source) {
       this.source = source;
-    }	
+    }
 
   , show: function () {
       var pos = $.extend({}, this.$element.position(), {
         height: this.$element[0].offsetHeight
       }), scrollHeight;
-      
+
       scrollHeight = typeof this.options.scrollHeight == 'function' ?
           this.options.scrollHeight.call() :
           this.options.scrollHeight;
@@ -303,7 +303,7 @@
       if (!this.focused) {
         this.focused = true;
         if (this.options.minLength === 0 && !this.$element.val() || this.options.showHintOnFocus) {
-          this.lookup(); 
+          this.lookup();
         }
       }
     }
