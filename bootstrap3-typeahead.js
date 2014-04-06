@@ -124,7 +124,7 @@
         return this.shown ? this.hide() : this;
       }
 
-      if (this.options.items == 'all' || this.options.minLength === 0 && !this.$element.val()) {
+      if (this.options.items == 'all') {
         return this.render(items).show();
       } else {
         return this.render(items.slice(0, this.options.items)).show();
