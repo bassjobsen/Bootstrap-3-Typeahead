@@ -179,3 +179,26 @@ Bloodhound
 	items: 4,
 	source:numbers.ttAdapter()	
 	});
+	
+
+Bootstrap Tags Input
+====================
+[Bootstrap Tags Input](http://timschlechter.github.io/bootstrap-tagsinput/examples/bootstrap3/) is a jQuery plugin providing a Twitter Bootstrap user interface for managing tags. Bootstrap Tags Input has a typeahead option which allows you to set the source:
+
+    $('input').tagsinput({
+      typeahead: {
+        source: ['Amsterdam', 'Washington', 'Sydney', 'Beijing', 'Cairo']
+      }
+    });
+
+or
+
+    $('input').tagsinput({
+      typeahead: {                  
+        source: function(query) {
+          return $.get('http://someservice.com');
+        }
+      }
+    });
+
+See also: https://github.com/bassjobsen/Bootstrap-3-Typeahead/issues/40	
