@@ -49,6 +49,8 @@ Destroys previously initialized typeaheads. This entails reverting DOM modificat
 	
 	$('.typeahead').typeahead('destroy')
 
+Also read: [How to Use JSON Objects With Twitter Bootstrap Typeahead](http://tatiyants.com/how-to-use-json-objects-with-twitter-bootstrap-typeahead/)	
+
 Javascript Example
 =============
 
