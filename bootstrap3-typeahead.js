@@ -39,6 +39,7 @@
     this.highlighter = this.options.highlighter || this.highlighter;
     this.updater = this.options.updater || this.updater;
     this.source = this.options.source;
+    this.delay = typeof this.options.delay == 'number' ? this.options.delay : 250;
     this.$menu = $(this.options.menu);
     this.shown = false;
     this.listen();
@@ -106,9 +107,15 @@
         return this.shown ? this.hide() : this;
       }
 
-      items = $.isFunction(this.source) ? this.source(this.query, $.proxy(this.process, this)) : this.source;
+      var worker = $.proxy(function() {
+        items = $.isFunction(this.source) ? this.source(this.query, $.proxy(this.process, this)) : this.source;
+        if (items) {
+          this.process(items);
+        }
+      }, this)
 
-      return items ? this.process(items) : this;
+      clearTimeout(this.lookupWorker)
+      this.lookupWorker = setTimeout(worker, this.delay)
     }
 
   , process: function (items) {
