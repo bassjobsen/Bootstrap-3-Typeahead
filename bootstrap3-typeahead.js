@@ -141,8 +141,11 @@
             var query = this.query;
             var i = item.indexOf(query);
             var len, leftPart, middelPart, rightPart, strong;
+            len = query.length;
+            if(len == 0){
+                return html.text(item).html();
+            }
             while (i > -1) {
-                len = query.length;
                 leftPart = item.substr(0, i);
                 middelPart = item.substr(i, len);
                 rightPart = item.substr(i + len);
