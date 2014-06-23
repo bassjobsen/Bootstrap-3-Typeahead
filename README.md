@@ -61,7 +61,7 @@ Loading a collection
 		$("#name").typeahead({ source:data });
 	},'json');
 	//example_collection.json
-	// ["item1","item2","item3]
+	// ["item1","item2","item3"]
 
 Options
 =======
