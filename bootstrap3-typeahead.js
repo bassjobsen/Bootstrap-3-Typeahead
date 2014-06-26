@@ -176,10 +176,26 @@
     }
 
   , highlighter: function (item) {
-      var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-      return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-        return '<strong>' + match + '</strong>';
-      });
+          var html = $('<div></div>');
+          var query = this.query;
+          var i = item.indexOf(query);
+          var len, leftPart, middelPart, rightPart, strong;
+          len = query.length;
+          if(len == 0){
+              return html.text(item).html();
+          }
+          while (i > -1) {
+              leftPart = item.substr(0, i);
+              middelPart = item.substr(i, len);
+              rightPart = item.substr(i + len);
+              strong = $('<strong></strong>').text(middelPart);
+              html
+                  .append(document.createTextNode(leftPart))
+                  .append(strong);
+              item = rightPart;
+              i = item.indexOf(query);
+          }
+          return html.append(document.createTextNode(item)).html();
     }
 
   , render: function (items) {
