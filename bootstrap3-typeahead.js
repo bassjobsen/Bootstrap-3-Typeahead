@@ -103,7 +103,7 @@
         this.query = this.$element.val() ||  '';
       }
 
-      if (this.query.length < this.options.minLength) {
+      if ((this.query.length < this.options.minLength) && !this.showHintOnFocus) {
         return this.shown ? this.hide() : this;
       }
 
