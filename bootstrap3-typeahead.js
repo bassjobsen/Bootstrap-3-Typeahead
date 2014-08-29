@@ -37,6 +37,7 @@
     this.select = this.options.select || this.select;
     this.autoSelect = typeof this.options.autoSelect == 'boolean' ? this.options.autoSelect : true;
     this.highlighter = this.options.highlighter || this.highlighter;
+    this.render = this.options.render || this.render;
     this.updater = this.options.updater || this.updater;
     this.source = this.options.source;
     this.delay = typeof this.options.delay == 'number' ? this.options.delay : 250;
