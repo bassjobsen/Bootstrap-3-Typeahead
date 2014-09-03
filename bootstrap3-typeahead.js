@@ -20,7 +20,19 @@
  * ============================================================ */
 
 
-!function($){
+(function(factory) {
+  // AMD
+  if (typeof define === "function" && define.amd) {
+    define("lib/bootstrap3-typeahead", ["jquery"], function($) {
+      factory($);
+    });
+  }
+  // CommonJS
+  else if (typeof exports !== "undefined") {
+    var $ = require("jquery");
+    factory($);
+  }
+}(function($) {
 
   "use strict";
   // jshint laxcomma: true
@@ -395,4 +407,4 @@
     $this.typeahead($this.data());
   });
 
-}(window.jQuery);
+}));
