@@ -20,19 +20,24 @@
  * ============================================================ */
 
 
-(function(factory) {
-  // AMD
-  if (typeof define === "function" && define.amd) {
-    define("lib/bootstrap3-typeahead", ["jquery"], function($) {
-      factory($);
+(function(root, factory) {
+
+  "use strict";
+
+  // CommonJS module is defined
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = factory(require('jquery')(root));
+  }
+  // AMD module is defined
+  else if (typeof define === "function" && define.amd) {
+    define("bootstrap3-typeahead", ["jquery"], function($) {
+      return factory($);
     });
+  } else {
+    factory(root.jQuery);
   }
-  // CommonJS
-  else if (typeof exports !== "undefined") {
-    var $ = require("jquery");
-    factory($);
-  }
-}(function($) {
+
+}(this, function($) {
 
   "use strict";
   // jshint laxcomma: true
