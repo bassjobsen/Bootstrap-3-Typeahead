@@ -179,16 +179,16 @@
           var html = $('<div></div>');
           var query = this.query;
           var i = item.indexOf(query);
-          var len, leftPart, middelPart, rightPart, strong;
+          var len, leftPart, middlePart, rightPart, strong;
           len = query.length;
           if(len == 0){
               return html.text(item).html();
           }
           while (i > -1) {
               leftPart = item.substr(0, i);
-              middelPart = item.substr(i, len);
+              middlePart = item.substr(i, len);
               rightPart = item.substr(i + len);
-              strong = $('<strong></strong>').text(middelPart);
+              strong = $('<strong></strong>').text(middlePart);
               html
                   .append(document.createTextNode(leftPart))
                   .append(strong);
