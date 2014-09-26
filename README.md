@@ -63,7 +63,7 @@ Loading a collection
 	//example_collection.json
 	// ["item1","item2","item3"]
 	
-Loading an Array oj Objects
+Loading an Array of Objects
 --------------------
 
 	$.get('example_collection_2.json', function(data){
