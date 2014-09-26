@@ -60,6 +60,7 @@
     this.delay = typeof this.options.delay == 'number' ? this.options.delay : 250;
     this.$menu = $(this.options.menu);
     this.shown = false;
+    this.strings = true;
     this.listen();
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false;
   };
@@ -70,6 +71,7 @@
 
   , select: function () {
       var val = this.$menu.find('.active').data('value');
+
       if(this.autoSelect || val) {
         this.$element
           .val(this.updater(val))
@@ -139,7 +141,12 @@
   , process: function (items) {
       var that = this;
 
+      if (items.length && typeof items[0] != "string")
+          this.strings = false
+
       items = $.grep(items, function (item) {
+        if (!that.strings)
+          item = item[that.options.property]
         return that.matcher(item);
       });
 
@@ -167,6 +174,8 @@
         , item;
 
       while ((item = items.shift())) {
+        if (!this.strings) item = item[this.options.property]
+
         if (!item.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
         else if (~item.indexOf(this.query)) caseSensitive.push(item);
         else caseInsensitive.push(item);
@@ -385,7 +394,7 @@
   var old = $.fn.typeahead;
 
   $.fn.typeahead = function (option) {
-	var arg = arguments;
+  var arg = arguments;
     return this.each(function () {
       var $this = $(this)
         , data = $this.data('typeahead')
@@ -409,6 +418,7 @@
   , minLength: 1
   , scrollHeight: 0
   , autoSelect: true
+  , property: 'value'
   };
 
   $.fn.typeahead.Constructor = Typeahead;
