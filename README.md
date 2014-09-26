@@ -62,6 +62,22 @@ Loading a collection
 	},'json');
 	//example_collection.json
 	// ["item1","item2","item3"]
+	
+Loading an Array oj Objects
+--------------------
+
+	$.get('example_collection_2.json', function(data){
+		$("#name").typeahead({ source:data, property:"stateName" });
+	},'json');
+	//example_collection_2.json
+	/* stateList = [
+	    {"stateCode": "CA", "stateName": "California"},
+	    {"stateCode": "AZ", "stateName": "Arizona"},
+	    {"stateCode": "NY", "stateName": "New York"},
+	    {"stateCode": "NV", "stateName": "Nevada"},
+	    {"stateCode": "OH", "stateName": "Ohio"},
+	   ...
+	];*/
 
 Options
 =======
@@ -83,6 +99,12 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>array, function</td>
                  <td>[ ]</td>
                  <td>The data source to query against. May be an array of strings or a function. The function accepts two arguments, the <code>query</code> value in the input field and the <code>process</code> callback. The function may be used synchronously by returning the data source directly or asynchronously via the <code>process</code> callback's single argument.</td>
+               </tr>
+               <tr>
+                 <td>property</td>
+                 <td>string</td>
+                 <td>value</td>
+                 <td>When using JSON Object in <code>source</code>, it sets the property of the Object to be used for processing the data.</td>
                </tr>
                <tr>
                  <td>items</td>
