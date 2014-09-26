@@ -59,6 +59,7 @@
     this.source = this.options.source;
     this.delay = typeof this.options.delay == 'number' ? this.options.delay : 250;
     this.$menu = $(this.options.menu);
+    this.onSelect = this.options.onSelect
     this.shown = false;
     this.strings = true;
     this.listen();
@@ -70,13 +71,21 @@
     constructor: Typeahead
 
   , select: function () {
-      var val = this.$menu.find('.active').data('value');
+      var val = this.$menu.find('.active').data('value')
+      , text;
 
-      if(this.autoSelect || val) {
+      if (!this.strings) text = val[this.options.property]
+      else text = val
+
+      if(this.autoSelect || text) {
         this.$element
-          .val(this.updater(val))
+          .val(this.updater(text))
           .change();
       }
+
+      if (typeof this.onSelect == "function")
+          this.onSelect(val)
+
       return this.hide();
     }
 
@@ -145,9 +154,12 @@
           this.strings = false
 
       items = $.grep(items, function (item) {
-        if (!that.strings)
-          item = item[that.options.property]
-        return that.matcher(item);
+        if (!that.strings) {
+          var itemval = item[that.options.property];
+        } else {
+          var itemval = item;
+        }
+        if (that.matcher(itemval)) return item
       });
 
       items = this.sorter(items);
@@ -171,13 +183,15 @@
       var beginswith = []
         , caseSensitive = []
         , caseInsensitive = []
-        , item;
+        , item
+        , sortby;
 
       while ((item = items.shift())) {
-        if (!this.strings) item = item[this.options.property]
+        if (this.strings) sortby = item
+        else sortby = item[this.options.property]
 
-        if (!item.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
-        else if (~item.indexOf(this.query)) caseSensitive.push(item);
+        if (!sortby.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
+        else if (~sortby.indexOf(this.query)) caseSensitive.push(item);
         else caseInsensitive.push(item);
       }
 
@@ -185,6 +199,10 @@
     }
 
   , highlighter: function (item) {
+          var that = this;
+
+          if (!that.strings) item = item[that.options.property]
+
           var html = $('<div></div>');
           var query = this.query;
           var i = item.indexOf(query);
@@ -418,6 +436,7 @@
   , minLength: 1
   , scrollHeight: 0
   , autoSelect: true
+  , onselect: null
   , property: 'value'
   };
 
