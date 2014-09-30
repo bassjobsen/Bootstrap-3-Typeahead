@@ -59,7 +59,9 @@
     this.source = this.options.source;
     this.delay = typeof this.options.delay == 'number' ? this.options.delay : 250;
     this.$menu = $(this.options.menu);
+    this.onSelect = this.options.onSelect
     this.shown = false;
+    this.strings = true;
     this.listen();
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false;
   };
@@ -69,12 +71,21 @@
     constructor: Typeahead
 
   , select: function () {
-      var val = this.$menu.find('.active').data('value');
-      if(this.autoSelect || val) {
+      var val = this.$menu.find('.active').data('value')
+      , text;
+
+      if (!this.strings) text = val[this.options.property]
+      else text = val
+
+      if(this.autoSelect || text) {
         this.$element
-          .val(this.updater(val))
+          .val(this.updater(text))
           .change();
       }
+
+      if (typeof this.onSelect == "function")
+          this.onSelect(val)
+
       return this.hide();
     }
 
@@ -139,8 +150,16 @@
   , process: function (items) {
       var that = this;
 
+      if (items.length && typeof items[0] != "string")
+          this.strings = false
+
       items = $.grep(items, function (item) {
-        return that.matcher(item);
+        if (!that.strings) {
+          var itemval = item[that.options.property];
+        } else {
+          var itemval = item;
+        }
+        if (that.matcher(itemval)) return item
       });
 
       items = this.sorter(items);
@@ -164,11 +183,15 @@
       var beginswith = []
         , caseSensitive = []
         , caseInsensitive = []
-        , item;
+        , item
+        , sortby;
 
       while ((item = items.shift())) {
-        if (!item.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
-        else if (~item.indexOf(this.query)) caseSensitive.push(item);
+        if (this.strings) sortby = item
+        else sortby = item[this.options.property]
+
+        if (!sortby.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
+        else if (~sortby.indexOf(this.query)) caseSensitive.push(item);
         else caseInsensitive.push(item);
       }
 
@@ -176,6 +199,10 @@
     }
 
   , highlighter: function (item) {
+          var that = this;
+
+          if (!that.strings) item = item[that.options.property]
+
           var html = $('<div></div>');
           var query = this.query;
           var i = item.indexOf(query);
@@ -385,7 +412,7 @@
   var old = $.fn.typeahead;
 
   $.fn.typeahead = function (option) {
-	var arg = arguments;
+  var arg = arguments;
     return this.each(function () {
       var $this = $(this)
         , data = $this.data('typeahead')
@@ -409,6 +436,8 @@
   , minLength: 1
   , scrollHeight: 0
   , autoSelect: true
+  , onselect: null
+  , property: 'value'
   };
 
   $.fn.typeahead.Constructor = Typeahead;
