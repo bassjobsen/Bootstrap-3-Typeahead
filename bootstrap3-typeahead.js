@@ -34,7 +34,7 @@
       return factory($);
     });
   } else {
-    factory(root.jQuery);
+    factory(root.jQuery || jQuery);
   }
 
 }(this, function($) {
