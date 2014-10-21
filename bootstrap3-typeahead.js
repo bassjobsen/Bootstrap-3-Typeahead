@@ -62,6 +62,7 @@
     this.shown = false;
     this.listen();
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false;
+    this.afterSelect = this.options.afterSelect
   };
 
   Typeahead.prototype = {
@@ -74,6 +75,7 @@
         this.$element
           .val(this.updater(val))
           .change();
+        this.afterSelect();
       }
       return this.hide();
     }
@@ -409,6 +411,7 @@
   , minLength: 1
   , scrollHeight: 0
   , autoSelect: true
+  , afterSelect: $.noop
   };
 
   $.fn.typeahead.Constructor = Typeahead;
