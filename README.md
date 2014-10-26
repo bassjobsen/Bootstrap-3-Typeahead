@@ -138,6 +138,13 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>true</td>
                  <td>Allows you to dictate whether or not the first suggestion is selected automatically. Turning autoselect off also means that the input won't clear if nothing is selected and <kbd>enter</kbd> or <kbd>tab</kbd> is hit.</td>
                </tr>
+               <tr>
+                 <td>afterSelect</td>
+                 <td>function</td>
+                 <td>$.noop()</td>
+                 <td>Call back function to execute after selected an item. </td>
+               </tr>
+              <tr>
               </tbody>
             </table>
 
