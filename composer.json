@@ -1,5 +1,6 @@
 {
     "name": "bassjobsen/bootstrap-3-typeahead",
+    "type": "component",
     "license": "Apache-2.0",
     "description": "Bootstrap 3 Typeahead",
     "minimum-stability": "dev",
