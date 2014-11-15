@@ -8,5 +8,13 @@
             "name": "Bass Jobsen",
             "email": "bass@w3masters.nl"
         }
-    ]
+    ],
+    "extra": {
+        "component": {
+            "files": [
+                "bootstrap3-typeahead.js",
+                "bootstrap3-typeahead.min.js"
+            ]
+        }
+    }
 }
