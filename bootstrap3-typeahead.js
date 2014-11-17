@@ -177,29 +177,21 @@
       return beginswith.concat(caseSensitive, caseInsensitive);
     }
 
-  , highlighter: function (item) {
-          var html = $('<div></div>');
-          var query = this.query;
-          var i = item.indexOf(query);
-          var len, leftPart, middlePart, rightPart, strong;
-          len = query.length;
-          if(len == 0){
-              return html.text(item).html();
-          }
-          while (i > -1) {
-              leftPart = item.substr(0, i);
-              middlePart = item.substr(i, len);
-              rightPart = item.substr(i + len);
-              strong = $('<strong></strong>').text(middlePart);
-              html
-                  .append(document.createTextNode(leftPart))
-                  .append(strong);
-              item = rightPart;
-              i = item.indexOf(query);
-          }
-          return html.append(document.createTextNode(item)).html();
+  , escape: function(str) {
+        return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
     }
-
+   , highlighter: function (item) {
+        item = this.escape(item);
+        var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+       return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+         return '<strong>' + match + '</strong>';
+      });
+    }
   , render: function (items) {
       var that = this;
 
