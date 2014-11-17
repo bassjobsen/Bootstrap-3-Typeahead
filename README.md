@@ -144,6 +144,12 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>$.noop()</td>
                  <td>Call back function to execute after selected an item. </td>
                </tr>
+			   <tr>
+                 <td>delay</td>
+                 <td>integer</td>
+                 <td>0</td>
+                 <td>Adds a delay between lookups.</td>
+               </tr>
               <tr>
               </tbody>
             </table>
