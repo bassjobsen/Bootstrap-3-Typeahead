@@ -180,7 +180,7 @@
   , highlighter: function (item) {
           var html = $('<div></div>');
           var query = this.query;
-          var i = item.indexOf(query);
+          var i = item.toLowerCase().indexOf(query.toLowerCase());
           var len, leftPart, middlePart, rightPart, strong;
           len = query.length;
           if(len == 0){
