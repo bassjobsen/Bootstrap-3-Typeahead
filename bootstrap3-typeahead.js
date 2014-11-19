@@ -57,7 +57,7 @@
     this.render = this.options.render || this.render;
     this.updater = this.options.updater || this.updater;
     this.source = this.options.source;
-    this.delay = typeof this.options.delay == 'number' ? this.options.delay : 250;
+    this.delay = this.options.delay;
     this.$menu = $(this.options.menu);
     this.shown = false;
     this.listen();
@@ -412,6 +412,7 @@
   , scrollHeight: 0
   , autoSelect: true
   , afterSelect: $.noop
+  , delay: 0
   };
 
   $.fn.typeahead.Constructor = Typeahead;
