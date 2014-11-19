@@ -5,15 +5,15 @@ For simple autocomplete use cases there seems to be nothing wrong with the dropp
 
 Users who migrate their website or app from Twitter's Bootstrap 2 to Bootstrap 3 can also use this plugin to keep their current autocomplete functions. See for a complete list of migrations steps: [Migrate your templates from Twitter Bootstrap 2.x to Twitter Bootstrap 3](http://bassjobsen.weblogs.fm/migrate-your-templates-from-twitter-bootstrap-2-x-to-twitter-bootstrap-3/)
 
-With Twitter Bootstrap 3 the typeahead plugin had been dropped. [@mdo](http://twitter.com/mdo) says: "in favor of folks using [Twitter's typeahead](https://github.com/twitter/typeahead.js). Twitter's typeahead has more features than the old bootstrap-typeahead.js and less bugs." Twitter's typeahead don't work direct with Bootstrap 3. The DOM structure of the dropdown menu used by `typeahead.js` differs from the DOM structure of the Bootstrap dropdown menu. You'll need to load some additional CSS in order to get the `typeahead.js` dropdown menu to fit the default Bootstrap theme.
+With Twitter Bootstrap 3 the typeahead plugin had been dropped. [@mdo](http://twitter.com/mdo) says: "in favor of folks using [Twitter's typeahead](https://github.com/twitter/typeahead.js). Twitter's typeahead has more features than the old bootstrap-typeahead.js and less bugs." Twitter's typeahead don't work direct with Bootstrap 3. The DOM structure of the dropdown menu used by `typeahead.js` differs from the DOM structure of the Bootstrap dropdown menu. You'll need to load some additional CSS in order to get the `typeahead.js` dropdown menu to fit the default Bootstrap's theme. Try [extended Bootstrap's LESS](https://github.com/bassjobsen/typeahead.js-bootstrap-css) or if your are looking for a more a more extended version try: [typeahead.js-bootstrap3.less](https://github.com/hyspace/typeahead.js-bootstrap3.less/blob/master/typeahead.less).
 
-`Typeahead.js` doesn't seem ready for the new Twitter Bootstrap 3 at the moment. Code is not up to date and fixes are need. See also:
-[Typeahead problems with Bootstrap 3.0 RC1](http://stackoverflow.com/questions/18167246/typeahead-problems-with-bootstrap-3-0-rc1).
+~~`Typeahead.js` doesn't seem ready for the new Twitter Bootstrap 3 at the moment. Code is not up to date and fixes are need. See also:
+[Typeahead problems with Bootstrap 3.0 RC1](http://stackoverflow.com/questions/18167246/typeahead-problems-with-bootstrap-3-0-rc1).~~
 
 Download
 ========
 
- - Download the latest [boostrap3-typeahead.js](https://github.com/bassjobsen/Bootstrap-3-Typeahead/bootstrap3-typeahead.js) or [bootstrap3-typeahead.min.js](https://github.com/bassjobsen/Bootstrap-3-Typeahead/boostrap3-typeahead.min.js).
+ - Download the latest [bootstrap3-typeahead.js](https://github.com/bassjobsen/Bootstrap-3-Typeahead/blob/master/bootstrap3-typeahead.js) or [bootstrap3-typeahead.min.js](https://github.com/bassjobsen/Bootstrap-3-Typeahead/blob/master/bootstrap3-typeahead.min.js).
 
  - Include it in your source after jQuery and Bootstrap Javascript.
  
@@ -24,7 +24,7 @@ Build your own version with typeahead with `grunt dist`.
 
 CSS
 ===
-There is no additional css required to use the plugin. Bootstrap's css contains all required styles in the `.dropdownmenu` class. The original CSS add a `z-index` of 1051 to the dropdownmenu via the typeahead class. You could add this if you need it.
+There is no additional css required to use the plugin. Bootstrap's css contains all required styles in the `.dropdown-menu` class. The original CSS add a `z-index` of 1051 to the dropdownmenu via the typeahead class. You could add this if you need it.
 `.typeahead { z-index: 1051;}` (less or css).
 
 Usage
@@ -44,6 +44,24 @@ Via JavaScript
 Call the typeahead manually with:
 
 	$('.typeahead').typeahead()
+
+Destroys previously initialized typeaheads. This entails reverting DOM modifications and removing event handlers:	
+	
+	$('.typeahead').typeahead('destroy')
+
+Also read: [How to Use JSON Objects With Twitter Bootstrap Typeahead](http://tatiyants.com/how-to-use-json-objects-with-twitter-bootstrap-typeahead/)	
+
+Javascript Example
+=============
+
+Loading a collection
+--------------------
+
+	$.get('example_collection.json', function(data){
+		$("#name").typeahead({ source:data });
+	},'json');
+	//example_collection.json
+	// ["item1","item2","item3"]
 
 Options
 =======
@@ -115,17 +133,24 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>Method used to highlight autocomplete results. Accepts a single argument <code>item</code> and has the scope of the typeahead instance. Should return html.</td>
                </tr>
               <tr>
-                 <td>autoselect</td>
+                 <td>autoSelect</td>
                  <td>boolean</td>
                  <td>true</td>
                  <td>Allows you to dictate whether or not the first suggestion is selected automatically. Turning autoselect off also means that the input won't clear if nothing is selected and <kbd>enter</kbd> or <kbd>tab</kbd> is hit.</td>
                </tr>
                <tr>
+                 <td>afterSelect</td>
+                 <td>function</td>
+                 <td>$.noop()</td>
+                 <td>Call back function to execute after selected an item. </td>
+               </tr>
+			   <tr>
                  <td>delay</td>
                  <td>integer</td>
-                 <td>true</td>
-                 <td>Adds a delay between to lookup</td>
+                 <td>0</td>
+                 <td>Adds a delay between lookups.</td>
                </tr>
+              <tr>
               </tbody>
             </table>
 
@@ -137,4 +162,58 @@ Methods
 
 Initializes an input with a typeahead.
 
- 
+Bower
+=====
+
+To use with [Bower](http://bower.io/). Add to your bower.json file:
+
+
+	{
+            "name": "MyProject",
+            "dependencies": {
+            "bootstrap3-typeahead": "git@github.com:bassjobsen/Bootstrap-3-Typeahead.git#master"
+            }
+       }
+
+Bloodhound
+==========	
+[Bloodhound](https://github.com/twitter/typeahead.js/blob/master/doc/bloodhound.md) is the [typeahead.js](https://github.com/twitter/typeahead.js) suggestion engine, since version 0.10.0. Bloodhound is robust, flexible, and offers advanced functionalities such as prefetching, intelligent caching, fast lookups, and backfilling with remote data. To use Bloodhound with Bootstrap-3-Typeahead:
+
+	// instantiate the bloodhound suggestion engine
+	var numbers = new Bloodhound({
+	datumTokenizer: Bloodhound.tokenizers.whitespace,
+	queryTokenizer: Bloodhound.tokenizers.whitespace,
+	local:  ["(A)labama","Alaska","Arizona","Arkansas","Arkansas2","Barkansas"]
+	});
+	 
+	// initialize the bloodhound suggestion engine
+	numbers.initialize();
+
+	$('.typeahead').typeahead(
+	{
+	items: 4,
+	source:numbers.ttAdapter()	
+	});
+	
+
+Bootstrap Tags Input
+====================
+[Bootstrap Tags Input](http://timschlechter.github.io/bootstrap-tagsinput/examples/) is a jQuery plugin providing a Twitter Bootstrap user interface for managing tags. Bootstrap Tags Input has a typeahead option which allows you to set the source:
+
+    $('input').tagsinput({
+      typeahead: {
+        source: ['Amsterdam', 'Washington', 'Sydney', 'Beijing', 'Cairo']
+      }
+    });
+
+or
+
+    $('input').tagsinput({
+      typeahead: {                  
+        source: function(query) {
+          return $.get('http://someservice.com');
+        }
+      }
+    });
+
+See also: https://github.com/bassjobsen/Bootstrap-3-Typeahead/issues/40	
