@@ -195,7 +195,7 @@
                   .append(document.createTextNode(leftPart))
                   .append(strong);
               item = rightPart;
-              i = item.indexOf(query);
+              i = item.toLowerCase().indexOf(query.toLowerCase());
           }
           return html.append(document.createTextNode(item)).html();
     }
