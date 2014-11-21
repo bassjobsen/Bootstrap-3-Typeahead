@@ -64,19 +64,21 @@ Loading a collection
 Using JSON objects instead of simple strings
 --------------------------------------------
 
-	You can add all the properties you wish on your object, only name matters for typeahead. The other values are for you, to be able to match the selected item with something in your model.
+You can add all the properties you wish on your objects, as long as you provide a "name" attribute. The other values are for you, to be able to match the selected item with something in your model.
 	
 	var $input = $('.typeahead');
-	$input.typeahead({source:[{id: "someId1", name: "Display name 1"}, {id: "someId2", name: "Display name 2"}], 
-							autoSelect: true}); 
+	$input.typeahead({source:[{id: "someId1", name: "Display name 1"}, 
+				{id: "someId2", name: "Display name 2"}], 
+				autoSelect: true}); 
 	$input.change(function() {
 		var current = $input.typeahead("getActive");
 		if (current) {
 			// Some item from your model is active!
 			if (current.name == $input.val()) {
-				// This means the exact match is found
+				// This means the exact match is found. Use toLowerCase() if you want case insensitive match.
 			} else {
-				// This means it is only a partial match, you can either add a new item or take the active if you don't want new items
+				// This means it is only a partial match, you can either add a new item 
+				// or take the active if you don't want new items
 			}
 		} else {
 			// Nothing is active so it is a new value (or maybe empty value)
