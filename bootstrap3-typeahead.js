@@ -148,7 +148,7 @@
       });
 
       items = this.sorter(items);
-    
+
       if (!items.length) {
         return this.shown ? this.hide() : this;
       }
@@ -187,27 +187,27 @@
       return beginswith.concat(caseSensitive, caseInsensitive);
     }
 
-    , highlighter: function (item) {
-        var html = $('<div></div>');
-        var query = this.query;
+  , highlighter: function (item) {
+          var html = $('<div></div>');
+          var query = this.query;
           var i = item.toLowerCase().indexOf(query.toLowerCase());
-        var len, leftPart, middlePart, rightPart, strong;
-        len = query.length;
-        if(len == 0){
-            return html.text(item).html();
-        }
-        while (i > -1) {
-            leftPart = item.substr(0, i);
-            middlePart = item.substr(i, len);
-            rightPart = item.substr(i + len);
-            strong = $('<strong></strong>').text(middlePart);
-            html
-                .append(document.createTextNode(leftPart))
-                .append(strong);
-            item = rightPart;
-            i = item.toLowerCase().indexOf(query.toLowerCase());
-        }
-        return html.append(document.createTextNode(item)).html();
+          var len, leftPart, middlePart, rightPart, strong;
+          len = query.length;
+          if(len == 0){
+              return html.text(item).html();
+          }
+          while (i > -1) {
+              leftPart = item.substr(0, i);
+              middlePart = item.substr(i, len);
+              rightPart = item.substr(i + len);
+              strong = $('<strong></strong>').text(middlePart);
+              html
+                  .append(document.createTextNode(leftPart))
+                  .append(strong);
+              item = rightPart;
+              i = item.toLowerCase().indexOf(query.toLowerCase());
+          }
+          return html.append(document.createTextNode(item)).html();
     }
 
   , render: function (items) {
@@ -255,7 +255,7 @@
 
       prev.addClass('active');
     }
-    
+
   , listen: function () {
       this.$element
         .on('focus',    $.proxy(this.focus, this))
@@ -417,9 +417,9 @@
       if (!data) $this.data('typeahead', (data = new Typeahead(this, options)));
       if (typeof option == 'string') {
         if (arg.length > 1) {
-           data[option].apply(data, Array.prototype.slice.call(arg ,1));
+          data[option].apply(data, Array.prototype.slice.call(arg ,1));
         } else {
-           data[option]();
+          data[option]();
         }
       }
     });
