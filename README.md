@@ -64,7 +64,7 @@ Loading a collection
 Using JSON objects instead of simple strings
 --------------------------------------------
 
-You can add all the properties you wish on your objects, as long as you provide a "name" attribute. The other values are for you, to be able to match the selected item with something in your model.
+You can add all the properties you wish on your objects, as long as you provide a "name" attribute OR you provide your own getDisplayText method. The other values are for you, to be able to match the selected item with something in your model.
 	
 	var $input = $('.typeahead');
 	$input.typeahead({source:[{id: "someId1", name: "Display name 1"}, 
@@ -154,6 +154,12 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>function</td>
                  <td>highlights all default matches</td>
                  <td>Method used to highlight autocomplete results. Accepts a single argument <code>item</code> and has the scope of the typeahead instance. Should return html.</td>
+               </tr>
+			   <tr>
+                 <td>getDisplayText</td>
+                 <td>function</td>
+                 <td>gets the display text of an item</td>
+                 <td>Method used to get textual representation of an item of the sources. Accepts a single argument <code>item</code> and has the scope of the typeahead instance. Should return a String, returns item or item.name by default.</td>
                </tr>
               <tr>
                  <td>autoSelect</td>

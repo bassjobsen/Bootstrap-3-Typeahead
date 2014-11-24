@@ -56,6 +56,7 @@
     this.highlighter = this.options.highlighter || this.highlighter;
     this.render = this.options.render || this.render;
     this.updater = this.options.updater || this.updater;
+	this.getDisplayText = this.options.getDisplayText || this.getDisplayText;
     this.source = this.options.source;
     this.delay = this.options.delay;
     this.$menu = $(this.options.menu);
@@ -167,7 +168,7 @@
     }
 
   , matcher: function (item) {
-    var it = item.name ? item.name : item;
+    var it = this.getDisplayText(item);
       return ~it.toLowerCase().indexOf(this.query.toLowerCase());
     }
 
@@ -178,7 +179,7 @@
         , item;
 
       while ((item = items.shift())) {
-        var it = item.name ? item.name : item;
+        var it = this.getDisplayText(item);
         if (!it.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
         else if (~it.indexOf(this.query)) caseSensitive.push(item);
         else caseInsensitive.push(item);
@@ -215,7 +216,7 @@
       var self = this;
       var activeFound = false;
       items = $(items).map(function (i, item) {
-        var text = item.name ? item.name : item;
+        var text = self.getDisplayText(item);
         i = $(that.options.item).data('value', item);
         i.find('a').html(that.highlighter(text));
         if (text == self.$element.val()) {
@@ -233,6 +234,10 @@
       this.$menu.html(items);
       return this;
     }
+
+  , getDisplayText: function(item) {
+      return item.name || item;
+  }
 
   , next: function (event) {
       var active = this.$menu.find('.active').removeClass('active')
