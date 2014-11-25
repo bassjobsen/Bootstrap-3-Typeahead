@@ -49,8 +49,6 @@ Destroys previously initialized typeaheads. This entails reverting DOM modificat
 	
 	$('.typeahead').typeahead('destroy')
 
-Also read: [How to Use JSON Objects With Twitter Bootstrap Typeahead](http://tatiyants.com/how-to-use-json-objects-with-twitter-bootstrap-typeahead/)	
-
 Javascript Example
 =============
 
@@ -62,7 +60,32 @@ Loading a collection
 	},'json');
 	//example_collection.json
 	// ["item1","item2","item3"]
+	
+Using JSON objects instead of simple strings
+--------------------------------------------
 
+You can add all the properties you wish on your objects, as long as you provide a "name" attribute OR you provide your own displayText method. The other values are for you, to be able to match the selected item with something in your model.
+	
+	var $input = $('.typeahead');
+	$input.typeahead({source:[{id: "someId1", name: "Display name 1"}, 
+				{id: "someId2", name: "Display name 2"}], 
+				autoSelect: true}); 
+	$input.change(function() {
+		var current = $input.typeahead("getActive");
+		if (current) {
+			// Some item from your model is active!
+			if (current.name == $input.val()) {
+				// This means the exact match is found. Use toLowerCase() if you want case insensitive match.
+			} else {
+				// This means it is only a partial match, you can either add a new item 
+				// or take the active if you don't want new items
+			}
+		} else {
+			// Nothing is active so it is a new value (or maybe empty value)
+		}
+	});
+	
+	
 Options
 =======
 
@@ -82,7 +105,7 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>source</td>
                  <td>array, function</td>
                  <td>[ ]</td>
-                 <td>The data source to query against. May be an array of strings or a function. The function accepts two arguments, the <code>query</code> value in the input field and the <code>process</code> callback. The function may be used synchronously by returning the data source directly or asynchronously via the <code>process</code> callback's single argument.</td>
+                 <td>The data source to query against. May be an array of strings, an array of JSON object with a name property or a function. The function accepts two arguments, the <code>query</code> value in the input field and the <code>process</code> callback. The function may be used synchronously by returning the data source directly or asynchronously via the <code>process</code> callback's single argument.</td>
                </tr>
                <tr>
                  <td>items</td>
@@ -132,6 +155,12 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>highlights all default matches</td>
                  <td>Method used to highlight autocomplete results. Accepts a single argument <code>item</code> and has the scope of the typeahead instance. Should return html.</td>
                </tr>
+			   <tr>
+                 <td>displayText</td>
+                 <td>function</td>
+                 <td>item.name || item</td>
+                 <td>Method used to get textual representation of an item of the sources. Accepts a single argument <code>item</code> and has the scope of the typeahead instance. Should return a String.</td>
+               </tr>
               <tr>
                  <td>autoSelect</td>
                  <td>boolean</td>
@@ -142,7 +171,7 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>afterSelect</td>
                  <td>function</td>
                  <td>$.noop()</td>
-                 <td>Call back function to execute after selected an item. </td>
+                 <td>Call back function to execute after selected an item. It gets the current active item in parameter if any.</td>
                </tr>
 			   <tr>
                  <td>delay</td>
@@ -157,10 +186,11 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
 Methods
 =======
 
-	.typeahead(options)
+	.typeahead(options): Initializes an input with a typeahead.
 	.lookup: To trigger the lookup function externally
+	.getActive: To get the currently active item, you will get a String or a JSOn object depending on how you initialized typeahead. Works only for the first match.
 
-Initializes an input with a typeahead.
+
 
 Bower
 =====
