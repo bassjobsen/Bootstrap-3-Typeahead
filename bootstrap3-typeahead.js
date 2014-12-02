@@ -1,5 +1,5 @@
 /* =============================================================
- * bootstrap3-typeahead.js v3.0.3
+ * bootstrap3-typeahead.js v3.1.0
  * https://github.com/bassjobsen/Bootstrap-3-Typeahead
  * =============================================================
  * Original written by @mdo and @fat
@@ -63,7 +63,7 @@
     this.shown = false;
     this.listen();
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false;
-    this.afterSelect = this.options.afterSelect
+    this.afterSelect = this.options.afterSelect;
   };
 
   Typeahead.prototype = {
@@ -135,10 +135,10 @@
         if (items) {
           this.process(items);
         }
-      }, this)
+      }, this);
 
-      clearTimeout(this.lookupWorker)
-      this.lookupWorker = setTimeout(worker, this.delay)
+      clearTimeout(this.lookupWorker);
+      this.lookupWorker = setTimeout(worker, this.delay);
     }
 
   , process: function (items) {
@@ -194,7 +194,7 @@
           var i = item.toLowerCase().indexOf(query.toLowerCase());
           var len, leftPart, middlePart, rightPart, strong;
           len = query.length;
-          if(len == 0){
+          if(len === 0){
               return html.text(item).html();
           }
           while (i > -1) {
