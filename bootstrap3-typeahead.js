@@ -62,7 +62,7 @@
     this.shown = false;
     this.listen();
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false;
-    this.afterSelect = this.options.afterSelect;
+    this.afterSelect = this.options.afterSelect
   };
 
   Typeahead.prototype = {
@@ -132,10 +132,10 @@
         if (items) {
           this.process(items);
         }
-      }, this);
+      }, this)
 
-      clearTimeout(this.lookupWorker);
-      this.lookupWorker = setTimeout(worker, this.delay);
+      clearTimeout(this.lookupWorker)
+      this.lookupWorker = setTimeout(worker, this.delay)
     }
 
   , process: function (items) {
@@ -159,7 +159,7 @@
     }
 
   , matcher: function (item) {
-      return item.toLowerCase().indexOf(this.query.toLowerCase());
+      return ~item.toLowerCase().indexOf(this.query.toLowerCase());
     }
 
   , sorter: function (items) {
@@ -170,7 +170,7 @@
 
       while ((item = items.shift())) {
         if (!item.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
-        else if (item.indexOf(this.query)) caseSensitive.push(item);
+        else if (~item.indexOf(this.query)) caseSensitive.push(item);
         else caseInsensitive.push(item);
       }
 
@@ -183,7 +183,7 @@
           var i = item.toLowerCase().indexOf(query.toLowerCase());
           var len, leftPart, middlePart, rightPart, strong;
           len = query.length;
-          if(len === 0){
+          if(len == 0){
               return html.text(item).html();
           }
           while (i > -1) {
@@ -306,7 +306,7 @@
     }
 
   , keydown: function (e) {
-      this.suppressKeyPressRepeat = $.inArray(e.keyCode, [40,38,9,13,27]);
+      this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27]);
       if (!this.shown && e.keyCode == 40) {
         this.lookup("");
       } else {
