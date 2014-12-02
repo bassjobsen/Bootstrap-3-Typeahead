@@ -56,6 +56,7 @@
     this.highlighter = this.options.highlighter || this.highlighter;
     this.render = this.options.render || this.render;
     this.updater = this.options.updater || this.updater;
+	this.displayText = this.options.displayText || this.displayText;
     this.source = this.options.source;
     this.delay = this.options.delay;
     this.$menu = $(this.options.menu);
@@ -71,11 +72,13 @@
 
   , select: function () {
       var val = this.$menu.find('.active').data('value');
+      this.$element.data("active", val);
       if(this.autoSelect || val) {
+        var newVal = this.updater(val);
         this.$element
-          .val(this.updater(val))
+          .val(newVal.name || newVal)
           .change();
-        this.afterSelect();
+        this.afterSelect(newVal);
       }
       return this.hide();
     }
@@ -123,7 +126,7 @@
         this.query = this.$element.val() ||  '';
       }
 
-      if ((this.query.length < this.options.minLength) && !this.showHintOnFocus) {
+      if (this.query.length < this.options.minLength) {
         return this.shown ? this.hide() : this;
       }
 
@@ -150,6 +153,12 @@
       if (!items.length) {
         return this.shown ? this.hide() : this;
       }
+      
+      if (items.length > 0) {
+        this.$element.data("active", items[0]);
+      } else {
+        this.$element.data("active", null);
+      }
 
       if (this.options.items == 'all') {
         return this.render(items).show();
@@ -159,7 +168,8 @@
     }
 
   , matcher: function (item) {
-      return ~item.toLowerCase().indexOf(this.query.toLowerCase());
+    var it = this.displayText(item);
+      return ~it.toLowerCase().indexOf(this.query.toLowerCase());
     }
 
   , sorter: function (items) {
@@ -169,8 +179,9 @@
         , item;
 
       while ((item = items.shift())) {
-        if (!item.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
-        else if (~item.indexOf(this.query)) caseSensitive.push(item);
+        var it = this.displayText(item);
+        if (!it.toLowerCase().indexOf(this.query.toLowerCase())) beginswith.push(item);
+        else if (~it.indexOf(this.query)) caseSensitive.push(item);
         else caseInsensitive.push(item);
       }
 
@@ -202,19 +213,31 @@
 
   , render: function (items) {
       var that = this;
-
+      var self = this;
+      var activeFound = false;
       items = $(items).map(function (i, item) {
+        var text = self.displayText(item);
         i = $(that.options.item).data('value', item);
-        i.find('a').html(that.highlighter(item));
+        i.find('a').html(that.highlighter(text));
+        if (text == self.$element.val()) {
+            i.addClass("active");
+            self.$element.data("active", item);
+            activeFound = true;
+        }
         return i[0];
       });
 
-      if (this.autoSelect) {
+      if (this.autoSelect && !activeFound) {        
         items.first().addClass('active');
+        this.$element.data("active", items.first().data('value'));
       }
       this.$menu.html(items);
       return this;
     }
+
+  , displayText: function(item) {
+      return item.name || item;
+  }
 
   , next: function (event) {
       var active = this.$menu.find('.active').removeClass('active')
@@ -256,6 +279,7 @@
     }
   , destroy : function () {
       this.$element.data('typeahead',null);
+      this.$element.data('active',null);
       this.$element
         .off('focus')
         .off('blur')
@@ -308,7 +332,7 @@
   , keydown: function (e) {
       this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27]);
       if (!this.shown && e.keyCode == 40) {
-        this.lookup("");
+        this.lookup();
       } else {
         this.move(e);
       }
@@ -349,8 +373,8 @@
   , focus: function (e) {
       if (!this.focused) {
         this.focused = true;
-        if (this.options.minLength === 0 && !this.$element.val() || this.options.showHintOnFocus) {
-          this.lookup();
+        if (this.options.showHintOnFocus) {
+          this.lookup("");
         }
       }
     }
@@ -388,6 +412,9 @@
 
   $.fn.typeahead = function (option) {
 	var arg = arguments;
+     if (typeof option == 'string' && option == "getActive") {
+        return this.data("active");
+     }
     return this.each(function () {
       var $this = $(this)
         , data = $this.data('typeahead')
