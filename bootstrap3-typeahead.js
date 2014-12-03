@@ -6,40 +6,40 @@
  * =============================================================
  * Copyright 2014 Bass Jobsen @bassjobsen
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an 'AS IS' BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ============================================================ */
 
 
-(function(root, factory) {
+(function (root, factory) {
 
-  "use strict";
+  'use strict';
 
   // CommonJS module is defined
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = factory(require('jquery'));
   }
   // AMD module is defined
-  else if (typeof define === "function" && define.amd) {
-    define("bootstrap3-typeahead", ["jquery"], function($) {
-      return factory($);
+  else if (typeof define === 'function' && define.amd) {
+    define('bootstrap3-typeahead', ['jquery'], function ($) {
+      return factory ($);
     });
   } else {
     factory(root.jQuery);
   }
 
-}(this, function($) {
+}(this, function ($) {
 
-  "use strict";
+  'use strict';
   // jshint laxcomma: true
 
 
@@ -56,7 +56,7 @@
     this.highlighter = this.options.highlighter || this.highlighter;
     this.render = this.options.render || this.render;
     this.updater = this.options.updater || this.updater;
-	this.displayText = this.options.displayText || this.displayText;
+    this.displayText = this.options.displayText || this.displayText;
     this.source = this.options.source;
     this.delay = this.options.delay;
     this.$menu = $(this.options.menu);
@@ -68,11 +68,11 @@
 
   Typeahead.prototype = {
 
-    constructor: Typeahead
+    constructor: Typeahead,
 
-  , select: function () {
+    select: function () {
       var val = this.$menu.find('.active').data('value');
-      this.$element.data("active", val);
+      this.$element.data('active', val);
       if(this.autoSelect || val) {
         var newVal = this.updater(val);
         this.$element
@@ -81,17 +81,17 @@
         this.afterSelect(newVal);
       }
       return this.hide();
-    }
+    },
 
-  , updater: function (item) {
+    updater: function (item) {
       return item;
-    }
+    },
 
-  , setSource: function (source) {
+    setSource: function (source) {
       this.source = source;
-    }
+    },
 
-  , show: function () {
+    show: function () {
       var pos = $.extend({}, this.$element.position(), {
         height: this.$element[0].offsetHeight
       }), scrollHeight;
@@ -110,15 +110,15 @@
 
       this.shown = true;
       return this;
-    }
+    },
 
-  , hide: function () {
+    hide: function () {
       this.$menu.hide();
       this.shown = false;
       return this;
-    }
+    },
 
-  , lookup: function (query) {
+    lookup: function (query) {
       var items;
       if (typeof(query) != 'undefined' && query !== null) {
         this.query = query;
@@ -139,9 +139,9 @@
 
       clearTimeout(this.lookupWorker);
       this.lookupWorker = setTimeout(worker, this.delay);
-    }
+    },
 
-  , process: function (items) {
+    process: function (items) {
       var that = this;
 
       items = $.grep(items, function (item) {
@@ -155,9 +155,9 @@
       }
       
       if (items.length > 0) {
-        this.$element.data("active", items[0]);
+        this.$element.data('active', items[0]);
       } else {
-        this.$element.data("active", null);
+        this.$element.data('active', null);
       }
 
       if (this.options.items == 'all') {
@@ -165,14 +165,14 @@
       } else {
         return this.render(items.slice(0, this.options.items)).show();
       }
-    }
+    },
 
-  , matcher: function (item) {
+    matcher: function (item) {
     var it = this.displayText(item);
       return ~it.toLowerCase().indexOf(this.query.toLowerCase());
-    }
+    },
 
-  , sorter: function (items) {
+    sorter: function (items) {
       var beginswith = []
         , caseSensitive = []
         , caseInsensitive = []
@@ -186,9 +186,9 @@
       }
 
       return beginswith.concat(caseSensitive, caseInsensitive);
-    }
+    },
 
-  , highlighter: function (item) {
+    highlighter: function (item) {
           var html = $('<div></div>');
           var query = this.query;
           var i = item.toLowerCase().indexOf(query.toLowerCase());
@@ -209,9 +209,9 @@
               i = item.toLowerCase().indexOf(query.toLowerCase());
           }
           return html.append(document.createTextNode(item)).html();
-    }
+    },
 
-  , render: function (items) {
+    render: function (items) {
       var that = this;
       var self = this;
       var activeFound = false;
@@ -220,8 +220,8 @@
         i = $(that.options.item).data('value', item);
         i.find('a').html(that.highlighter(text));
         if (text == self.$element.val()) {
-            i.addClass("active");
-            self.$element.data("active", item);
+            i.addClass('active');
+            self.$element.data('active', item);
             activeFound = true;
         }
         return i[0];
@@ -229,17 +229,17 @@
 
       if (this.autoSelect && !activeFound) {        
         items.first().addClass('active');
-        this.$element.data("active", items.first().data('value'));
+        this.$element.data('active', items.first().data('value'));
       }
       this.$menu.html(items);
       return this;
-    }
+    },
 
-  , displayText: function(item) {
+    displayText: function(item) {
       return item.name || item;
-  }
+    },
 
-  , next: function (event) {
+    next: function (event) {
       var active = this.$menu.find('.active').removeClass('active')
         , next = active.next();
 
@@ -248,9 +248,9 @@
       }
 
       next.addClass('active');
-    }
+    },
 
-  , prev: function (event) {
+    prev: function (event) {
       var active = this.$menu.find('.active').removeClass('active')
         , prev = active.prev();
 
@@ -259,9 +259,9 @@
       }
 
       prev.addClass('active');
-    }
+    },
 
-  , listen: function () {
+    listen: function () {
       this.$element
         .on('focus',    $.proxy(this.focus, this))
         .on('blur',     $.proxy(this.blur, this))
@@ -276,8 +276,9 @@
         .on('click', $.proxy(this.click, this))
         .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
         .on('mouseleave', 'li', $.proxy(this.mouseleave, this));
-    }
-  , destroy : function () {
+    },
+    
+    destroy : function () {
       this.$element.data('typeahead',null);
       this.$element.data('active',null);
       this.$element
@@ -291,17 +292,18 @@
       }
 
       this.$menu.remove();
-    }
-  , eventSupported: function(eventName) {
+    },
+    
+    eventSupported: function(eventName) {
       var isSupported = eventName in this.$element;
       if (!isSupported) {
         this.$element.setAttribute(eventName, 'return;');
         isSupported = typeof this.$element[eventName] === 'function';
       }
       return isSupported;
-    }
+    },
 
-  , move: function (e) {
+    move: function (e) {
       if (!this.shown) return;
 
       switch(e.keyCode) {
@@ -327,23 +329,23 @@
       }
 
       e.stopPropagation();
-    }
+    },
 
-  , keydown: function (e) {
+    keydown: function (e) {
       this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27]);
       if (!this.shown && e.keyCode == 40) {
         this.lookup();
       } else {
         this.move(e);
       }
-    }
+    },
 
-  , keypress: function (e) {
+    keypress: function (e) {
       if (this.suppressKeyPressRepeat) return;
       this.move(e);
-    }
+    },
 
-  , keyup: function (e) {
+    keyup: function (e) {
       switch(e.keyCode) {
         case 40: // down arrow
         case 38: // up arrow
@@ -368,36 +370,36 @@
 
       e.stopPropagation();
       e.preventDefault();
-  }
+   },
 
-  , focus: function (e) {
+   focus: function (e) {
       if (!this.focused) {
         this.focused = true;
         if (this.options.showHintOnFocus) {
-          this.lookup("");
+          this.lookup('');
         }
       }
-    }
+    },
 
-  , blur: function (e) {
+    blur: function (e) {
       this.focused = false;
       if (!this.mousedover && this.shown) this.hide();
-    }
+    },
 
-  , click: function (e) {
+    click: function (e) {
       e.stopPropagation();
       e.preventDefault();
       this.select();
       this.$element.focus();
-    }
+    },
 
-  , mouseenter: function (e) {
+    mouseenter: function (e) {
       this.mousedover = true;
       this.$menu.find('.active').removeClass('active');
       $(e.currentTarget).addClass('active');
-    }
+    },
 
-  , mouseleave: function (e) {
+    mouseleave: function (e) {
       this.mousedover = false;
       if (!this.focused && this.shown) this.hide();
     }
@@ -412,8 +414,8 @@
 
   $.fn.typeahead = function (option) {
 	var arg = arguments;
-     if (typeof option == 'string' && option == "getActive") {
-        return this.data("active");
+     if (typeof option == 'string' && option == 'getActive') {
+        return this.data('active');
      }
     return this.each(function () {
       var $this = $(this)
