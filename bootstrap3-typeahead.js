@@ -131,9 +131,10 @@
       }
 
       var worker = $.proxy(function() {
-        items = $.isFunction(this.source) ? this.source(this.query, $.proxy(this.process, this)) : this.source;
-        if (items) {
-          this.process(items);
+        
+        if($.isFunction(this.source)) this.source(this.query, $.proxy(this.process, this));
+        else if (this.source) {
+          this.process(this.source);
         }
       }, this);
 
