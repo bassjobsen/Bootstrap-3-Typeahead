@@ -60,6 +60,7 @@
     this.source = this.options.source;
     this.delay = this.options.delay;
     this.$menu = $(this.options.menu);
+    this.$appendTo = this.options.appendTo ? $(this.options.appendTo) : null;   
     this.shown = false;
     this.listen();
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false;
@@ -100,8 +101,7 @@
           this.options.scrollHeight.call() :
           this.options.scrollHeight;
 
-      this.$menu
-        .insertAfter(this.$element)
+      (this.$appendTo ? this.$menu.appendTo(this.$appendTo) : this.$menu.insertAfter(this.$element))
         .css({
           top: pos.top + pos.height + scrollHeight
         , left: pos.left
