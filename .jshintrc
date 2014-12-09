@@ -1,6 +1,7 @@
 {
   "asi"      : true,
   "browser"  : true,
+  "node"     : true,
   "eqeqeq"   : false,
   "eqnull"   : true,
   "es3"      : true,
@@ -11,5 +12,6 @@
   "nonbsp"   : true,
   "strict"   : true,
   "undef"    : true,
-  "unused"   : true
+  "unused"   : false,
+  "predef" : ["define"]
 }
