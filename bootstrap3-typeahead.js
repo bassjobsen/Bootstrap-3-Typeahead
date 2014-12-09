@@ -101,7 +101,7 @@
           this.options.scrollHeight.call() :
           this.options.scrollHeight;
 
-      (this.$appendTo ? this.$menu.appendTo(this.$element) : this.$menu.insertAfter(this.$element))
+      (this.$appendTo ? this.$menu.appendTo(this.$appendTo) : this.$menu.insertAfter(this.$element))
         .css({
           top: pos.top + pos.height + scrollHeight
         , left: pos.left
