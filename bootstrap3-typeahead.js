@@ -30,7 +30,7 @@
   }
   // AMD module is defined
   else if (typeof define === 'function' && define.amd) {
-    define('bootstrap3-typeahead', ['jquery'], function ($) {
+    define(['jquery'], function ($) {
       return factory ($);
     });
   } else {
