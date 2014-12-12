@@ -436,8 +436,8 @@
   $.fn.typeahead.defaults = {
     source: []
   , items: 8
-  , menu: '<ul class="typeahead dropdown-menu"></ul>'
-  , item: '<li><a href="#"></a></li>'
+  , menu: '<ul class="typeahead dropdown-menu" role="listbox"></ul>'
+  , item: '<li><a href="#" role="option"></a></li>'
   , minLength: 1
   , scrollHeight: 0
   , autoSelect: true
