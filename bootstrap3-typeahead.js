@@ -65,6 +65,7 @@
     this.listen();
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false;
     this.afterSelect = this.options.afterSelect;
+    this.addItem = false;
   };
 
   Typeahead.prototype = {
@@ -151,7 +152,7 @@
 
       items = this.sorter(items);
 
-      if (!items.length) {
+      if (!items.length && !this.options.addItem) {
         return this.shown ? this.hide() : this;
       }
       
@@ -159,6 +160,11 @@
         this.$element.data('active', items[0]);
       } else {
         this.$element.data('active', null);
+      }
+      
+      // Add item
+      if (this.options.addItem){
+        items.push(this.options.addItem);
       }
 
       if (this.options.items == 'all') {
@@ -442,6 +448,7 @@
   , scrollHeight: 0
   , autoSelect: true
   , afterSelect: $.noop
+  , addItem: false
   , delay: 0
   };
 
