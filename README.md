@@ -180,6 +180,11 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>Adds a delay between lookups.</td>
                </tr>
               <tr>
+              <tr>
+                <td>addItem</td>
+                <td>JSON object</td>
+                <td>false</td>
+                <td>Adds an item to the end of the list, for example "New Entry". This could be used, for example, to pop a dialog when an item is not found in the list of data. Example: <a href="http://cl.ly/image/2u170I1q1G3A/addItem.png">http://cl.ly/image/2u170I1q1G3A/addItem.png</a></td>
               </tbody>
             </table>
 
