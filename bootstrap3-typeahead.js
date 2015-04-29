@@ -60,7 +60,7 @@
     this.source = this.options.source;
     this.delay = this.options.delay;
     this.$menu = $(this.options.menu);
-    this.$appendTo = this.options.appendTo ? $(this.options.appendTo) : null;   
+    this.$appendTo = this.options.appendTo ? $(this.options.appendTo) : null;
     this.shown = false;
     this.listen();
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false;
@@ -132,7 +132,7 @@
       }
 
       var worker = $.proxy(function() {
-        
+
         if($.isFunction(this.source)) this.source(this.query, $.proxy(this.process, this));
         else if (this.source) {
           this.process(this.source);
@@ -155,13 +155,13 @@
       if (!items.length && !this.options.addItem) {
         return this.shown ? this.hide() : this;
       }
-      
+
       if (items.length > 0) {
         this.$element.data('active', items[0]);
       } else {
         this.$element.data('active', null);
       }
-      
+
       // Add item
       if (this.options.addItem){
         items.push(this.options.addItem);
@@ -234,7 +234,7 @@
         return i[0];
       });
 
-      if (this.autoSelect && !activeFound) {        
+      if (this.autoSelect && !activeFound) {
         items.first().addClass('active');
         this.$element.data('active', items.first().data('value'));
       }
@@ -284,7 +284,7 @@
         .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
         .on('mouseleave', 'li', $.proxy(this.mouseleave, this));
     },
-    
+
     destroy : function () {
       this.$element.data('typeahead',null);
       this.$element.data('active',null);
@@ -300,7 +300,7 @@
 
       this.$menu.remove();
     },
-    
+
     eventSupported: function(eventName) {
       var isSupported = eventName in this.$element;
       if (!isSupported) {
@@ -334,8 +334,6 @@
           this.next();
           break;
       }
-
-      e.stopPropagation();
     },
 
     keydown: function (e) {
@@ -375,7 +373,6 @@
           this.lookup();
       }
 
-      e.stopPropagation();
       e.preventDefault();
    },
 
@@ -394,7 +391,6 @@
     },
 
     click: function (e) {
-      e.stopPropagation();
       e.preventDefault();
       this.select();
       this.$element.focus();
