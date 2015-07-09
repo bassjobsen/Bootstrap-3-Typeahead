@@ -193,7 +193,7 @@ Methods
 
 	.typeahead(options): Initializes an input with a typeahead.
 	.lookup: To trigger the lookup function externally
-	.getActive: To get the currently active item, you will get a String or a JSOn object depending on how you initialized typeahead. Works only for the first match.
+	.getActive: To get the currently active item, you will get a String or a JSON object depending on how you initialized typeahead. Works only for the first match.
 
 
 
