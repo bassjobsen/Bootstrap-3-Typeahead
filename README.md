@@ -150,12 +150,18 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>The method used to return selected item. Accepts a single argument, the <code>item</code> and has the scope of the typeahead instance.</td>
                </tr>
                <tr>
+                 <td>template</td>
+                 <td>function</td>
+                 <td>null</td>
+                 <td>Method to provide custom rendering of items. Instead of using highlighter and displayText to render your item you can customize the html that is placed in the typeahead list. Accepts a single argument <code>item</code> which is the object provided in your search result. Has the scope of the typeahead instance. Should return html.</td>
+               </tr>
+               <tr>
                  <td>highlighter</td>
                  <td>function</td>
                  <td>highlights all default matches</td>
-                 <td>Method used to highlight autocomplete results. Accepts a single argument <code>item</code> and has the scope of the typeahead instance. Should return html.</td>
+                 <td>Method used to highlight autocomplete results. Accepts a single argument <code>item</code> which contains text generated using displayText from your search result object. Has the scope of the typeahead instance. Should return html.</td>
                </tr>
-			   <tr>
+               <tr>
                  <td>displayText</td>
                  <td>function</td>
                  <td>item.name || item</td>
