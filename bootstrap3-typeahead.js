@@ -53,6 +53,7 @@
     this.sorter = this.options.sorter || this.sorter;
     this.select = this.options.select || this.select;
     this.autoSelect = typeof this.options.autoSelect == 'boolean' ? this.options.autoSelect : true;
+    this.template = this.options.template || null;
     this.highlighter = this.options.highlighter || this.highlighter;
     this.render = this.options.render || this.render;
     this.updater = this.options.updater || this.updater;
@@ -223,14 +224,25 @@
       var self = this;
       var activeFound = false;
       items = $(items).map(function (i, item) {
+
         var text = self.displayText(item);
-        i = $(that.options.item).data('value', item);
-        i.find('a').html(that.highlighter(text));
+
+        if (that.options.template) {
+            i = $('<li></li>');
+            i.html(that.options.template(item));
+        } else {
+            i = $(that.options.item);
+            i.find('a').html(that.highlighter(text));
+        }
+
+        i.data('value', item);
+
         if (text == self.$element.val()) {
             i.addClass('active');
             self.$element.data('active', item);
             activeFound = true;
         }
+
         return i[0];
       });
 
