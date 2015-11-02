@@ -66,6 +66,7 @@
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' ? this.options.showHintOnFocus : false;
     this.afterSelect = this.options.afterSelect;
     this.addItem = false;
+    this.selectKeys = this.options.selectKeys
   };
 
   Typeahead.prototype = {
@@ -358,19 +359,17 @@
         case 17: // ctrl
         case 18: // alt
           break;
-
-        case 9: // tab
-        case 13: // enter
-          if (!this.shown) return;
-          this.select();
-          break;
-
         case 27: // escape
           if (!this.shown) return;
           this.hide();
           break;
         default:
-          this.lookup();
+          if (this.selectKeys.indexOf(e.keyCode) >= 0) {
+            if (!this.shown) return;
+            this.select();
+          } else {
+            this.lookup();
+          }
       }
 
       e.preventDefault();
@@ -416,7 +415,7 @@
   var old = $.fn.typeahead;
 
   $.fn.typeahead = function (option) {
-	var arg = arguments;
+  var arg = arguments;
      if (typeof option == 'string' && option == 'getActive') {
         return this.data('active');
      }
@@ -446,6 +445,7 @@
   , afterSelect: $.noop
   , addItem: false
   , delay: 0
+  , selectKeys: [9, 13] // [tab, enter]
   };
 
   $.fn.typeahead.Constructor = Typeahead;
