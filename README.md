@@ -10,6 +10,12 @@ With Twitter Bootstrap 3 the typeahead plugin had been dropped. [@mdo](http://tw
 ~~`Typeahead.js` doesn't seem ready for the new Twitter Bootstrap 3 at the moment. Code is not up to date and fixes are needed. See also:
 [Typeahead problems with Bootstrap 3.0 RC1](http://stackoverflow.com/questions/18167246/typeahead-problems-with-bootstrap-3-0-rc1).~~
 
+Bootstrap 4
+===========
+[Bootstrap 4](http://blog.getbootstrap.com/2015/08/19/bootstrap-4-alpha/) is coming soon. The Bootstrap 3 Typeahead will also work with Bootstrap 4.
+The look and feel of Bootstrap 4 will differ from Bootstrap 3 and so does the drop down menu. In Bootstrap 4 the typeahead dropdown menu will look like that shown in the figure below:
+![Bootstrap 4 Typeahead](typeaheadv4.png).
+
 Download
 ========
 
