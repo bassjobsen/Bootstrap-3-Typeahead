@@ -1,7 +1,8 @@
 {
   "name": "bootstrap-3-typeahead",
   "description": "Bootstrap 3 Typeahead: The typeahead autocomplete plugin for Twitter's Bootstrap 2 ready to use with Bootstrap 3.",
-  "version": "v4.0.0-alpha",
+  "version": "v4.0.0",
+  "main": "bootstrap3-typeahead.js",
   "keywords": [
     "typeahead",
     "autocomplete",
