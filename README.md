@@ -161,12 +161,18 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>highlights all default matches</td>
                  <td>Method used to highlight autocomplete results. Accepts a single argument <code>item</code> and has the scope of the typeahead instance. Should return html.</td>
                </tr>
-			   <tr>
+               <tr>
                  <td>displayText</td>
                  <td>function</td>
                  <td>item.name || item</td>
                  <td>Method used to get textual representation of an item of the sources. Accepts a single argument <code>item</code> and has the scope of the typeahead instance. Should return a String.</td>
-               </tr>
+              </tr>
+              <tr>
+                 <td>icon</td>
+                 <td>function</td>
+                 <td>item</td>
+                 <td>Method used to get textual representation of an item's icon. Accepts a single argument <code>item</code> and has the scope of the typeahead instance. Should return a String. The return value will be prepended to the item's a tag contents without encoding to html. (The displayText method results are going to be escaped.) </td>
+              </tr>
               <tr>
                  <td>autoSelect</td>
                  <td>boolean</td>
