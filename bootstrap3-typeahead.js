@@ -57,6 +57,7 @@
     this.render = this.options.render || this.render;
     this.updater = this.options.updater || this.updater;
     this.displayText = this.options.displayText || this.displayText;
+    this.icon = this.options.icon || this.icon;
     this.source = this.options.source;
     this.delay = this.options.delay;
     this.$menu = $(this.options.menu);
@@ -80,7 +81,7 @@
         // Updater can be set to any random functions via "options" parameter in constructor above.
         // Add null check for cases when upadter returns void or undefined.
         if (!newVal) {
-          newVal = "";	
+          newVal = "";
         }
         this.$element
           .val(this.displayText(newVal) || newVal)
@@ -109,11 +110,11 @@
 
       var element;
       if (this.shown) {
-      	element = this.$menu;
+        element = this.$menu;
       } else if (this.$appendTo) {
-      	element = this.$menu.appendTo(this.$appendTo);
+        element = this.$menu.appendTo(this.$appendTo);
       } else {
-      	element = this.$menu.insertAfter(this.$element);
+        element = this.$menu.insertAfter(this.$element);
       }
       element.css({
           top: pos.top + pos.height + scrollHeight
@@ -237,7 +238,7 @@
       items = $(items).map(function (i, item) {
         var text = self.displayText(item);
         i = $(that.options.item).data('value', item);
-        i.find('a').html(that.highlighter(text));
+        i.find('a').html(self.icon(item) + that.highlighter(text));
         if (text == self.$element.val()) {
             i.addClass('active');
             self.$element.data('active', item);
@@ -256,6 +257,10 @@
 
     displayText: function(item) {
       return typeof item !== 'undefined' && typeof item.name != 'undefined' && item.name || item;
+    },
+  
+    icon: function(item) {
+      return ''; // no icon by default
     },
 
     next: function (event) {
@@ -428,7 +433,7 @@
   var old = $.fn.typeahead;
 
   $.fn.typeahead = function (option) {
-	var arg = arguments;
+    var arg = arguments;
      if (typeof option == 'string' && option == 'getActive') {
         return this.data('active');
      }
