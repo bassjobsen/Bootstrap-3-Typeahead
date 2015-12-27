@@ -76,7 +76,11 @@
       var val = this.$menu.find('.active').data('value');
       this.$element.data('active', val);
       if(this.autoSelect || val) {
-        var newVal = this.updater(val);
+	  if(typeof this.updater == "function"){
+	      var newVal = this.updater(val);
+	  }else{
+	      var newVal = window[this.updater](val);
+	  }
         // Updater can be set to any random functions via "options" parameter in constructor above.
         // Add null check for cases when upadter returns void or undefined.
         if (!newVal) {
@@ -85,7 +89,11 @@
         this.$element
           .val(this.displayText(newVal) || newVal)
           .change();
+	if(typeof this.afterSelect == "function"){
         this.afterSelect(newVal);
+	}else{
+	    window[this.afterSelect](newVal);
+	}
       }
       return this.hide();
     },

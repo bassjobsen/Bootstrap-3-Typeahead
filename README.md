@@ -177,7 +177,7 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>afterSelect</td>
                  <td>function</td>
                  <td>$.noop()</td>
-                 <td>Call back function to execute after selected an item. It gets the current active item in parameter if any.</td>
+                 <td>Call back function to execute after selected an item. It gets the current active item in parameter if any. Data attribute is data-after-select.</td>
                </tr>
 			   <tr>
                  <td>delay</td>
