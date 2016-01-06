@@ -145,7 +145,7 @@
 
       var worker = $.proxy(function() {
 
-        if($.isFunction(this.source)) this.source(this.query, $.proxy(this.process, this));
+        if($.isFunction(this.source)) this.process(this.source(this.query, $.proxy(this.process, this)));
         else if (this.source) {
           this.process(this.source);
         }
