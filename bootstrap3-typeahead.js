@@ -237,7 +237,7 @@
       items = $(items).map(function (i, item) {
         var text = self.displayText(item);
         i = $(that.options.item).data('value', item);
-        i.find('a').html(that.highlighter(text));
+        i.find('a').html(that.highlighter(item));
         if (text == self.$element.val()) {
             i.addClass('active');
             self.$element.data('active', item);
