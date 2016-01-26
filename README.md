@@ -239,7 +239,7 @@ Bloodhound
 
 Bootstrap Tags Input
 ====================
-[Bootstrap Tags Input](http://timschlechter.github.io/bootstrap-tagsinput/examples/) is a jQuery plugin providing a Twitter Bootstrap user interface for managing tags. Bootstrap Tags Input has a typeahead option which allows you to set the source:
+[Bootstrap Tags Input](http://bootstrap-tagsinput.github.io/bootstrap-tagsinput/examples/) is a jQuery plugin providing a Twitter Bootstrap user interface for managing tags. Bootstrap Tags Input has a typeahead option which allows you to set the source:
 
     $('input').tagsinput({
       typeahead: {
