@@ -238,10 +238,41 @@
             var that = this;
             var self = this;
             var activeFound = false;
-            items = $(items).map(function (i, item) {
+            var data = [];
+            var _category = that.options.separator;
+
+            $.each(items, function (key,value) {
+                // inject separator
+                if (key > 0 && value[_category] !== items[key - 1][_category]){
+                    data.push({
+                        __type: 'divider'
+                    });
+                }
+
+                // inject category header
+                if (value[_category] && (key === 0 || value[_category] !== items[key - 1][_category])){
+                    data.push({
+                        __type: 'category',
+                        name: value[_category]
+                    });
+                }
+                data.push(value);
+            });
+
+            items = $(data).map(function (i, item) {
+
+                if ((item.__type || false) == 'category'){
+                    return $(that.options.headerHtml).text(item.name)[0];
+                }
+
+                if ((item.__type || false) == 'divider'){
+                    return $(that.options.headerDivider)[0];
+                }
+
                 var text = self.displayText(item);
                 i = $(that.options.item).data('value', item);
                 i.find('a').html(that.highlighter(text));
+
                 if (text == self.$element.val()) {
                     i.addClass('active');
                     self.$element.data('active', item);
@@ -461,7 +492,10 @@
         autoSelect: true,
         afterSelect: $.noop,
         addItem: false,
-        delay: 0
+        delay: 0,
+        separator: 'category',
+        headerHtml: '<li class="dropdown-header"></li>',
+        headerDivider: '<li class="divider" role="separator"></li>'
     };
 
     $.fn.typeahead.Constructor = Typeahead;
