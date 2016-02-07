@@ -80,7 +80,7 @@
         // Updater can be set to any random functions via "options" parameter in constructor above.
         // Add null check for cases when updater returns void or undefined.
         if (!newVal) {
-          newVal = "";	
+          newVal = "";
         }
         this.$element
           .val(this.displayText(newVal) || newVal)
@@ -139,7 +139,7 @@
         this.query = this.$element.val() ||  '';
       }
 
-      if (this.query.length < this.options.minLength) {
+      if (this.query.length < this.options.minLength && !this.options.showHintOnFocus) {
         return this.shown ? this.hide() : this;
       }
 
@@ -435,7 +435,7 @@
     click: function (e) {
       e.preventDefault();
       this.select();
-      this.$element.focus();
+      this.hide();
     },
 
     mouseenter: function (e) {
