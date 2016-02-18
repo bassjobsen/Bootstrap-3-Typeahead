@@ -468,13 +468,13 @@
         , data = $this.data('typeahead')
         , options = typeof option == 'object' && option;
       if (!data) $this.data('typeahead', (data = new Typeahead(this, options)));
-      if (typeof option == 'string') {
+      if (typeof option == 'string' && data[option]) {
         if (arg.length > 1) {
           data[option].apply(data, Array.prototype.slice.call(arg ,1));
         } else {
           data[option]();
         }
-      }
+      } 
     });
   };
 
