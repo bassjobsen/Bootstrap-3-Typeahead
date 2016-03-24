@@ -315,6 +315,7 @@
         .on('focus',    $.proxy(this.focus, this))
         .on('blur',     $.proxy(this.blur, this))
         .on('keypress', $.proxy(this.keypress, this))
+        .on('input',    $.proxy(this.input, this))
         .on('keyup',    $.proxy(this.keyup, this));
 
       if (this.eventSupported('keydown')) {
@@ -334,6 +335,7 @@
         .off('focus')
         .off('blur')
         .off('keypress')
+        .off('input')
         .off('keyup');
 
       if (this.eventSupported('keydown')) {
@@ -391,6 +393,11 @@
       if (this.suppressKeyPressRepeat) return;
       this.move(e);
     },
+    
+    input: function (e) {
+      this.lookup();
+      e.preventDefault();
+    },
 
     keyup: function (e) {
       switch(e.keyCode) {
@@ -411,8 +418,6 @@
           if (!this.shown) return;
           this.hide();
           break;
-        default:
-          this.lookup();
       }
 
       e.preventDefault();
