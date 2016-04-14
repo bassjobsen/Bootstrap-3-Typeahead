@@ -215,6 +215,10 @@ To use with [Bower](http://bower.io/). Add to your bower.json file:
             "bootstrap3-typeahead": "git://github.com/bassjobsen/Bootstrap-3-Typeahead.git#master"
             }
        }
+       
+AngularJS
+=========
+An AngularJS directive for the Bootstrap 3 Typeahead jQuery plugin can be found at https://github.com/davidkonrad/angular-bootstrap3-typeahead.
 
 Bloodhound
 ==========	
