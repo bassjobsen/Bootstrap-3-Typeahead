@@ -427,7 +427,7 @@
       if (!this.focused) {
         this.focused = true;
         if (this.options.showHintOnFocus) {
-          this.lookup('');
+          this.lookup();
         }
       }
     },
