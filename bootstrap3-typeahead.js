@@ -325,7 +325,14 @@
       this.$menu
         .on('click', $.proxy(this.click, this))
         .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
-        .on('mouseleave', 'li', $.proxy(this.mouseleave, this));
+        .on('mouseleave', 'li', $.proxy(this.mouseleave, this))
+        .on('mousedown', $.proxy(this.mousedown,this));
+    },
+
+    mousedown: function(e) {
+         this.mouseddown=true;
+         e.stopPropagation();
+         e.preventDefault();
     },
 
     destroy : function () {
@@ -434,7 +441,15 @@
 
     blur: function (e) {
       this.focused = false;
-      if (!this.mousedover && this.shown) this.hide();
+        if (!this.mousedover && this.shown) {
+        if(this.mouseddown && e.originalEvent){    
+            this.mouseddown=false;                       
+        }else{
+           this.hide();          
+        }
+        
+    }
+
     },
 
     click: function (e) {
@@ -452,7 +467,7 @@
 
     mouseleave: function (e) {
       this.mousedover = false;
-      if (!this.focused && this.shown) this.hide();
+     /*if (!this.focused && this.shown) this.hide();*/
     }
 
   };
@@ -521,3 +536,4 @@
   });
 
 }));
+
