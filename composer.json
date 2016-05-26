@@ -1,0 +1,21 @@
+{
+    "name": "bassjobsen/bootstrap-3-typeahead",
+    "type": "component",
+    "license": "Apache-2.0",
+    "description": "Bootstrap 3 Typeahead",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Bass Jobsen",
+            "email": "bass@w3masters.nl"
+        }
+    ],
+    "extra": {
+        "component": {
+            "files": [
+                "bootstrap3-typeahead.js",
+                "bootstrap3-typeahead.min.js"
+            ]
+        }
+    }
+}
