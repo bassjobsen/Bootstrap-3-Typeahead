@@ -141,7 +141,7 @@
       if (typeof(query) != 'undefined' && query !== null) {
         this.query = query;
       } else {
-        this.query = this.$element.val() ||  '';
+        this.query = this.$element.val() || this.$element.text() || '';
       }
 
       if (this.query.length < this.options.minLength && !this.options.showHintOnFocus) {
