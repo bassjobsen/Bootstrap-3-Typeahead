@@ -358,6 +358,7 @@
       }
 
       this.$menu.remove();
+      this.destroyed = true;
     },
 
     eventSupported: function (eventName) {
@@ -415,6 +416,9 @@
     },
 
     keyup: function (e) {
+      if (this.destroyed) {
+        return;
+      }
       switch (e.keyCode) {
         case 40: // down arrow
         case 38: // up arrow
