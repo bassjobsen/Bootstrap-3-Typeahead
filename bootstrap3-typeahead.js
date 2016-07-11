@@ -84,6 +84,7 @@
         }
         this.$element
           .val(this.displayText(newVal) || newVal)
+          .text(this.displayText(newVal) || newVal)
           .change();
         this.afterSelect(newVal);
       }
