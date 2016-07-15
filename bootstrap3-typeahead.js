@@ -463,7 +463,7 @@
         this.focused = true;
         if (this.options.showHintOnFocus && this.hidingMenu !== true) {
           if(this.options.showHintOnFocus === "all") {
-            his.lookup(""); 
+            this.lookup(""); 
           } else {
             this.lookup();
           }
