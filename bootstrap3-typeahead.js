@@ -84,6 +84,7 @@
         }
         this.$element
           .val(this.displayText(newVal) || newVal)
+          .text(this.displayText(newVal) || newVal)
           .change();
         this.afterSelect(newVal);
       }
@@ -358,6 +359,7 @@
       }
 
       this.$menu.remove();
+      this.destroyed = true;
     },
 
     eventSupported: function (eventName) {
@@ -415,6 +417,9 @@
     },
 
     keyup: function (e) {
+      if (this.destroyed) {
+        return;
+      }
       switch (e.keyCode) {
         case 40: // down arrow
         case 38: // up arrow
