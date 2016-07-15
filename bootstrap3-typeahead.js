@@ -61,6 +61,7 @@
     this.delay = this.options.delay;
     this.$menu = $(this.options.menu);
     this.$appendTo = this.options.appendTo ? $(this.options.appendTo) : null;
+    this.fitToElement = typeof this.options.fitToElement == 'boolean' ? this.options.fitToElement : false;
     this.shown = false;
     this.listen();
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' || this.options.showHintOnFocus === "all" ? this.options.showHintOnFocus : false;
@@ -113,8 +114,18 @@
         element = this.$menu;
       } else if (this.$appendTo) {
         element = this.$menu.appendTo(this.$appendTo);
+        this.hasSameParent = this.$appendTo.is(this.$element.parent());
       } else {
         element = this.$menu.insertAfter(this.$element);
+        this.hasSameParent = true;
+      }      
+      
+      if (!this.hasSameParent) {
+          // We cannot rely on the element position, need to position relative to the window
+          element.css("position", "fixed");
+          var offset = this.$element.offset();
+          pos.top =  offset.top;
+          pos.left = offset.left;
       }
       // The rules for bootstrap are: 'dropup' in the parent and 'dropdown-menu-right' in the element.
       // Note that to get right alignment, you'll need to specify `menu` in the options to be:
@@ -127,6 +138,10 @@
       // logic in place except for the dropup/right-align cases.
       element.css({ top: newTop, left: newLeft }).show();
 
+      if (this.options.fitToElement === true) {
+          element.css("width", this.$element.width() + "px");
+      }
+    
       this.shown = true;
       return this;
     },
