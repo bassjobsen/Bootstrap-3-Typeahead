@@ -67,6 +67,7 @@
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' || this.options.showHintOnFocus === "all" ? this.options.showHintOnFocus : false;
     this.afterSelect = this.options.afterSelect;
     this.addItem = false;
+    this.value = this.$element.val() || this.$element.text();
   };
 
   Typeahead.prototype = {
@@ -139,7 +140,7 @@
       element.css({ top: newTop, left: newLeft }).show();
 
       if (this.options.fitToElement === true) {
-          element.css("width", this.$element.width() + "px");
+          element.css("width", this.$element.outerWidth() + "px");
       }
     
       this.shown = true;
@@ -353,12 +354,6 @@
         .on('mousedown', $.proxy(this.mousedown,this));
     },
 
-    mousedown: function (e) {
-      this.mouseddown = true;
-      e.stopPropagation();
-      e.preventDefault();
-    },
-
     destroy : function () {
       this.$element.data('typeahead',null);
       this.$element.data('active',null);
@@ -427,8 +422,13 @@
     },
 
     input: function (e) {
-      this.lookup();
-      e.preventDefault();
+      // This is a fixed for IE10/11 that fires the input event when a placehoder is changed
+      // (https://connect.microsoft.com/IE/feedback/details/810538/ie-11-fires-input-event-on-focus)
+      var currentValue = this.$element.val() || this.$element.text();
+      if (this.value !== currentValue) {
+        this.value = currentValue;
+        this.lookup();
+      }
     },
 
     keyup: function (e) {
@@ -455,13 +455,13 @@
           break;
       }
 
-      e.preventDefault();
+
     },
 
     focus: function (e) {
       if (!this.focused) {
         this.focused = true;
-        if (this.options.showHintOnFocus && this.hidingMenu !== true) {
+        if (this.options.showHintOnFocus && this.skipShowHintOnFocus !== true) {
           if(this.options.showHintOnFocus === "all") {
             this.lookup(""); 
           } else {
@@ -469,26 +469,30 @@
           }
         }
       }
+      if (this.skipShowHintOnFocus) {
+        this.skipShowHintOnFocus = false;
+      }
     },
 
     blur: function (e) {
-      this.focused = false;
-      if (!this.mousedover && this.shown) {
-        if (this.mouseddown && e.originalEvent) {
-          this.mouseddown = false;
-        } else {
-          this.hide();
-        }
-      }
+      if (!this.mousedover && !this.mouseddown && this.shown) {
+        this.hide();
+        this.focused = false;
+      } else if (this.mouseddown) {
+        // This is for IE that blurs the input when user clicks on scroll.
+        // We set the focus back on the input and prevent the lookup to occur again
+        this.skipShowHintOnFocus = true;
+        this.$element.focus();
+        this.mouseddown = false;
+      } 
     },
 
     click: function (e) {
       e.preventDefault();
-      this.hidingMenu = true;
+      this.skipShowHintOnFocus = true;
       this.select();
       this.$element.focus();
       this.hide();
-      this.hidingMenu = false;
     },
 
     mouseenter: function (e) {
@@ -499,8 +503,20 @@
 
     mouseleave: function (e) {
       this.mousedover = false;
-     /*if (!this.focused && this.shown) this.hide();*/
-    }
+      if (!this.focused && this.shown) this.hide();
+    },
+
+   /**
+     * We track the mousedown for IE. When clicking on the menu scrollbar, IE makes the input blur thus hiding the menu.
+     */
+    mousedown: function (e) {
+      this.mouseddown = true;
+      this.$menu.one("mouseup", function(e){
+        // IE won't fire this, but FF and Chrome will so we reset our flag for them here
+        this.mouseddown = false;
+      }.bind(this));
+    },
+
   };
 
 
