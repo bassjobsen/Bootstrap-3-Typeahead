@@ -140,7 +140,7 @@
       element.css({ top: newTop, left: newLeft }).show();
 
       if (this.options.fitToElement === true) {
-          element.css("width", this.$element.width() + "px");
+          element.css("width", this.$element.outerWidth() + "px");
       }
     
       this.shown = true;
