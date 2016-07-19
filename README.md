@@ -127,9 +127,9 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                </tr>
                <tr>
                  <td>showHintOnFocus</td>
-                 <td>boolean</td>
+                 <td>boolean or "all"</td>
                  <td>false</td>
-                 <td>If hints should be shown when applicable as soon as the input gets focus.</td>
+                 <td>If hints should be shown as soon as the input gets focus. If set to true, all match will be shown. If set to "all", it will display all hints, not filtering them by the current text. This can be used when you want an input that behaves a bit like a combo box plus auto completion as you type to filter the choices.</td>
                </tr>
               <tr>
                  <td>scrollHeight</td>
@@ -186,11 +186,23 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
                  <td>Adds a delay between lookups.</td>
                </tr>
               <tr>
+                <td>appendTo</td>
+                <td>jQuery element</td>
+                <td>null</td>
+                <td>By defaut, the menu is added right after the input element. Use this option to add the menu to another div. It should not be used if you want to use bootstrap dropup or dropdown-menu-right classes.</td>
+              </tr>
+              <tr>
+                <td>fitToElement</td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Set to true if you want the menu to be the same size than the input it is attached to.</td>
+              </tr>
               <tr>
                 <td>addItem</td>
                 <td>JSON object</td>
                 <td>false</td>
                 <td>Adds an item to the end of the list, for example "New Entry". This could be used, for example, to pop a dialog when an item is not found in the list of data. Example: <a href="http://cl.ly/image/2u170I1q1G3A/addItem.png">http://cl.ly/image/2u170I1q1G3A/addItem.png</a></td>
+              </tr>
               </tbody>
             </table>
 
@@ -215,6 +227,10 @@ To use with [Bower](http://bower.io/). Add to your bower.json file:
             "bootstrap3-typeahead": "git://github.com/bassjobsen/Bootstrap-3-Typeahead.git#master"
             }
        }
+       
+AngularJS
+=========
+An AngularJS directive for the Bootstrap 3 Typeahead jQuery plugin can be found at https://github.com/davidkonrad/angular-bootstrap3-typeahead.
 
 Bloodhound
 ==========	
