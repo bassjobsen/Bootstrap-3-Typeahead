@@ -122,6 +122,17 @@
       }      
       
       if (!this.hasSameParent) {
+          // Calculate z-index to ensure the element is not behind a parent
+          var parentsZindex = [];
+          this.$element.parents().each(function () {
+              var itemZIndex = $(this).css('z-index');
+              if (itemZIndex !== 'auto' && itemZIndex !== 0) {
+                  parentsZindex.push(parseInt(itemZIndex));
+              }
+          });
+          var zIndex = Math.max.apply(Math, parentsZindex) + 1;	  
+          element.css("z-index", zIndex);
+
           // We cannot rely on the element position, need to position relative to the window
           element.css("position", "fixed");
           var offset = this.$element.offset();
