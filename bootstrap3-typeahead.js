@@ -1,5 +1,5 @@
 /* =============================================================
- * bootstrap3-typeahead.js v3.1.0
+ * bootstrap3-typeahead.js v4.0.2
  * https://github.com/bassjobsen/Bootstrap-3-Typeahead
  * =============================================================
  * Original written by @mdo and @fat
