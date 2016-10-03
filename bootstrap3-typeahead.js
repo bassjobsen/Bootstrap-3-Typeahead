@@ -48,7 +48,7 @@
 
   var Typeahead = function (element, options) {
     this.$element = $(element);
-    this.options = $.extend({}, $.fn.typeahead.defaults, options);
+    this.options = $.extend({}, Typeahead.defaults, options);
     this.matcher = this.options.matcher || this.matcher;
     this.sorter = this.options.sorter || this.sorter;
     this.select = this.options.select || this.select;
@@ -545,7 +545,7 @@
     });
   };
 
-  $.fn.typeahead.defaults = {
+  Typeahead.defaults = {
     source: [],
     items: 8,
     menu: '<ul class="typeahead dropdown-menu" role="listbox"></ul>',
