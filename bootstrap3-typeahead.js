@@ -310,7 +310,7 @@
     },
 
     displayText: function (item) {
-      return typeof item !== 'undefined' && typeof item.name != 'undefined' && item.name || item;
+      return typeof item !== 'undefined' && typeof item.name != 'undefined' ? item.name : item;
     },
 
     next: function (event) {
