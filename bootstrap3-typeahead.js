@@ -236,11 +236,19 @@
       var first = [];
       var second = [];
       var i;
-      for (i = 0; i < matches.length; ++i) {
-        if (matches[i].length > 2) {//escape '><'
-          first.push(matches[i]);
+      if(matches && matches.length){
+        //html
+        for (i = 0; i < matches.length; ++i) {
+          if (matches[i].length > 2) {//escape '><'
+            first.push(matches[i]);
+          }
         }
+      }else{
+        //text
+        first = [];
+        first.push(item);
       }
+
       var reg = new RegExp(text, "g");
       var m;
       for (i = 0; i < first.length; ++i) {
