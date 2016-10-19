@@ -232,6 +232,9 @@
 
     highlighter: function (item) {
       var text = this.query;
+      if(text===""){
+        return item;
+      }
       var matches = item.match(/(>)([^<]*)(<)/g);
       var first = [];
       var second = [];
