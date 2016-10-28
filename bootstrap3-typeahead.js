@@ -340,7 +340,7 @@
         .on('focus',    $.proxy(this.focus, this))
         .on('blur',     $.proxy(this.blur, this))
         .on('keypress', $.proxy(this.keypress, this))
-        .on('input',    $.proxy(this.input, this))
+        .on('propertychange input',    $.proxy(this.input, this))
         .on('keyup',    $.proxy(this.keyup, this));
 
       if (this.eventSupported('keydown')) {
@@ -361,7 +361,7 @@
         .off('focus')
         .off('blur')
         .off('keypress')
-        .off('input')
+        .off('propertychange input')
         .off('keyup');
 
       if (this.eventSupported('keydown')) {
