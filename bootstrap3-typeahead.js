@@ -515,7 +515,7 @@
         // IE won't fire this, but FF and Chrome will so we reset our flag for them here
         this.mouseddown = false;
       }.bind(this));
-    },
+    }
 
   };
 
