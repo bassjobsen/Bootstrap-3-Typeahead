@@ -152,7 +152,15 @@
       this.shown = false;
       return this;
     },
-
+    toggle: function (query) {
+        var self = this;
+        if (self.shown) {
+            self.hide();
+        }
+        else {
+            self.lookup(query);
+        }
+    },
     lookup: function (query) {
       var items;
       if (typeof(query) != 'undefined' && query !== null) {
