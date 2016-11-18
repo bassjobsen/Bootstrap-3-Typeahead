@@ -197,16 +197,16 @@
         this.$element.data('active', null);
       }
 
+      if (this.options.items != 'all') {
+        items = items.slice(0, this.options.items);
+      }
+
       // Add item
       if (this.options.addItem){
         items.push(this.options.addItem);
       }
 
-      if (this.options.items == 'all') {
-        return this.render(items).show();
-      } else {
-        return this.render(items.slice(0, this.options.items)).show();
-      }
+      return this.render(items).show();
     },
 
     matcher: function (item) {
