@@ -231,29 +231,36 @@
     },
 
     highlighter: function (item) {
-      var html = $('<div></div>');
-      var query = this.query;
-      var i = item.toLowerCase().indexOf(query.toLowerCase());
-      var len = query.length;
-      var leftPart;
-      var middlePart;
-      var rightPart;
-      var strong;
-      if (len === 0) {
-        return html.text(item).html();
+      var text = this.query;
+      var matches = item.match(/(>)([^<]*)(<)/g);
+      var first = [];
+      var second = [];
+      var i;
+      if(matches && matches.length){
+        //html
+        for (i = 0; i < matches.length; ++i) {
+          if (matches[i].length > 2) {//escape '><'
+            first.push(matches[i]);
+          }
+        }
+      }else{
+        //text
+        first = [];
+        first.push(item);
       }
-      while (i > -1) {
-        leftPart = item.substr(0, i);
-        middlePart = item.substr(i, len);
-        rightPart = item.substr(i + len);
-        strong = $('<strong></strong>').text(middlePart);
-        html
-          .append(document.createTextNode(leftPart))
-          .append(strong);
-        item = rightPart;
-        i = item.toLowerCase().indexOf(query.toLowerCase());
+
+      var reg = new RegExp(text, "g");
+      var m;
+      for (i = 0; i < first.length; ++i) {
+        m = first[i].match(reg);
+        if(m && m.length>0){//find all text nodes matches
+          second.push(first[i]);
+        }
       }
-      return html.append(document.createTextNode(item)).html();
+      for (i = 0; i < second.length; ++i) {
+        item = item.replace(second[i],second[i].replace(reg, '<strong>$&</strong>'));
+      }
+      return item;
     },
 
     render: function (items) {
