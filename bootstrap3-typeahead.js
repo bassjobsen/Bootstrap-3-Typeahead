@@ -444,6 +444,9 @@
           break;
 
         case 9: // tab
+          if (!this.shown || this.showHintOnFocus) return;
+          this.select();
+          break;
         case 13: // enter
           if (!this.shown) return;
           this.select();
