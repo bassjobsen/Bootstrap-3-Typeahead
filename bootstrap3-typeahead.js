@@ -68,6 +68,7 @@
     this.afterSelect = this.options.afterSelect;
     this.addItem = false;
     this.value = this.$element.val() || this.$element.text();
+    this.keyPressed = false;
   };
 
   Typeahead.prototype = {
@@ -418,6 +419,7 @@
     },
 
     keydown: function (e) {
+      this.keyPressed = true;
       this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27]);
       if (!this.shown && e.keyCode == 40) {
         this.lookup();
@@ -454,6 +456,9 @@
           break;
 
         case 9: // tab
+          if (!this.shown || (this.showHintOnFocus && !this.keyPressed)) return;
+          this.select();
+          break;
         case 13: // enter
           if (!this.shown) return;
           this.select();
@@ -465,12 +470,12 @@
           break;
       }
 
-
     },
 
     focus: function (e) {
       if (!this.focused) {
         this.focused = true;
+        this.keyPressed = false;
         if (this.options.showHintOnFocus && this.skipShowHintOnFocus !== true) {
           if(this.options.showHintOnFocus === "all") {
             this.lookup(""); 
@@ -488,6 +493,7 @@
       if (!this.mousedover && !this.mouseddown && this.shown) {
         this.hide();
         this.focused = false;
+        this.keyPressed = false;
       } else if (this.mouseddown) {
         // This is for IE that blurs the input when user clicks on scroll.
         // We set the focus back on the input and prevent the lookup to occur again
