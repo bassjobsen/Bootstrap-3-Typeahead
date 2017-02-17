@@ -338,6 +338,8 @@
       }
 
       next.addClass('active');
+      //call scroll method to adjust this.$menu.scrollTop
+      this.scroll();
     },
 
     prev: function (event) {
@@ -349,6 +351,39 @@
       }
 
       prev.addClass('active');
+      //call scroll method to adjust this.$menu.scrollTop
+      this.scroll();
+    },
+    
+    scroll: function () {
+    	var active = this.$menu.find('.active');		//the active element
+    	var menu_s = this.$menu.scrollTop();			//actual scroll
+    	var _menu_s = null;					//backup variable (see later)
+    	var menu_h = this.$menu.height();			//height of entire menu
+    	var active_s = active.position().top;			//position of active element
+    	var active_h = active.height();				//height of active element
+    	//scroll down by one unit (abootstrap3-typeahead.jsctive element height) until you see 
+    	//the active option or scroll doesn't change anymore. This is 
+    	//necessary to avoid some infinite loop that sometimes occur.
+    	while (active_s + active_h > menu_h && _menu_s != menu_s) {
+    		var _menu_s = menu_s;				//backup menu_s to check if it'll change
+    		this.$menu.scrollTop(menu_s + active_h);	//move down by one unit
+    		active_s = active.position().top;		//re-calculate
+    		menu_s = this.$menu.scrollTop();		//re-calculate
+    	}
+    	if (_menu_s !== null) {
+    		//if we scroll down then do not scroll up
+    		return;
+    	}
+    	//scroll up by one unit (active element height) until you see 
+    	//the active option or scroll doesn't change anymore. This is 
+    	//necessary to avoid some infinite loop that sometimes occur.
+    	while (active_s < 0 && _menu_s != menu_s) {
+    		var _menu_s = menu_s;				//backup menu_s to check if it'll change
+    		this.$menu.scrollTop(menu_s - active_h);	//move up by one unit
+    		active_s = active.position().top;		//re-calculate
+    		menu_s = this.$menu.scrollTop();		//re-calculate
+    	}
     },
 
     listen: function () {
