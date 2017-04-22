@@ -338,6 +338,8 @@
       }
 
       next.addClass('active');
+      // added for screen reader
+      this.$element.val(next.text());
     },
 
     prev: function (event) {
@@ -349,6 +351,8 @@
       }
 
       prev.addClass('active');
+      // added for screen reader
+      this.$element.val(prev.text());
     },
 
     listen: function () {
