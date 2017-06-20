@@ -550,13 +550,13 @@
       }.bind(this));
     },
 
-    touchstart: function(e) {
+    touchstart: function (e) {
       e.preventDefault();
       this.$menu.find('.active').removeClass('active');
       $(e.currentTarget).addClass('active');
     },
 
-    touchend: function(e) {
+    touchend: function (e) {
       e.preventDefault();
       this.select();
       this.$element.focus();
