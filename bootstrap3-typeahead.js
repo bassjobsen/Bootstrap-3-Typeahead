@@ -369,11 +369,17 @@
         this.$element.on('keydown', $.proxy(this.keydown, this));
       }
 
-      this.$menu
-        .on('click', $.proxy(this.click, this))
-        .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
-        .on('mouseleave', 'li', $.proxy(this.mouseleave, this))
-        .on('mousedown', $.proxy(this.mousedown,this));
+      if ('ontouchstart' in document.documentElement) {
+        this.$menu
+          .on('touchstart', 'li', $.proxy(this.touchstart, this))
+          .on('touchend', 'li', $.proxy(this.click, this));
+      } else {
+        this.$menu
+          .on('click', $.proxy(this.click, this))
+          .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
+          .on('mouseleave', 'li', $.proxy(this.mouseleave, this))
+          .on('mousedown', $.proxy(this.mousedown,this));
+      }
     },
 
     destroy : function () {
@@ -542,6 +548,18 @@
         // IE won't fire this, but FF and Chrome will so we reset our flag for them here
         this.mouseddown = false;
       }.bind(this));
+    },
+
+    touchstart: function(e) {
+      e.preventDefault();
+      this.$menu.find('.active').removeClass('active');
+      $(e.currentTarget).addClass('active');
+    },
+
+    touchend: function(e) {
+      e.preventDefault();
+      this.select();
+      this.$element.focus();
     }
 
   };
