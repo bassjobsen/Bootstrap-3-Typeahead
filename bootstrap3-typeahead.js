@@ -69,6 +69,7 @@
     this.addItem = false;
     this.value = this.$element.val() || this.$element.text();
     this.keyPressed = false;
+    this.focused = this.$element.is( ":focus" );
   };
 
   Typeahead.prototype = {
