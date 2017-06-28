@@ -341,7 +341,8 @@
 
       next.addClass('active');
       // added for screen reader
-      this.$element.val(next.text());
+      var newVal = this.updater(next.data('value'));
+      this.$element.val(this.displayText(newVal) || newVal);
     },
 
     prev: function (event) {
@@ -354,7 +355,8 @@
 
       prev.addClass('active');
       // added for screen reader
-      this.$element.val(prev.text());
+      var newVal = this.updater(next.data('value'));
+      this.$element.val(this.displayText(newVal) || newVal);
     },
 
     listen: function () {
