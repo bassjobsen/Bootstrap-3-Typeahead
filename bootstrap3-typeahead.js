@@ -175,7 +175,7 @@
       if (typeof(query) != 'undefined' && query !== null) {
         this.query = query;
       } else {
-        this.query = this.$element.val() || this.$element.text() || '';
+        this.query = this.$element.val();
       }
 
       if (this.query.length < this.options.minLength && !this.options.showHintOnFocus) {
@@ -533,6 +533,7 @@
 
     blur: function (e) {
       if (!this.mousedover && !this.mouseddown && this.shown) {
+        this.select();
         this.hide();
         this.focused = false;
         this.keyPressed = false;
