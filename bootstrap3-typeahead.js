@@ -79,6 +79,26 @@
 
     constructor: Typeahead,
 
+
+    setDefault: function (val) {
+      // var val = this.$menu.find('.active').data('value');
+      this.$element.data('active', val);
+      if (this.autoSelect || val) {
+        var newVal = this.updater(val);
+        // Updater can be set to any random functions via "options" parameter in constructor above.
+        // Add null check for cases when updater returns void or undefined.
+        if (!newVal) {
+          newVal = '';
+        }
+        this.$element
+          .val(this.displayText(newVal) || newVal)
+          .text(this.displayText(newVal) || newVal)
+          .change();
+        this.afterSelect(newVal);
+      }
+      return this.hide();
+    },
+
     select: function () {
         var val = this.$menu.find('.active').data('value');
 
