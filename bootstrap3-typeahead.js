@@ -398,7 +398,7 @@
 
       prev.addClass('active');
       // added for screen reader
-      var newVal = this.updater(next.data('value'));
+      var newVal = this.updater(prev.data('value'));
       this.$element.val(this.displayText(newVal) || newVal);
     },
 
