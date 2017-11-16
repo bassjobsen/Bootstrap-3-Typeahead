@@ -346,7 +346,7 @@
 
         var text = self.displayText(item);
         i = $(that.options.item).data('value', item);
-        i.find('a').html(that.highlighter(text, item));
+        i.find(that.options.itemContentSelector).addBack(that.options.itemContentSelector).html(that.highlighter(text, item));
         if(this.followLinkOnSelect) {
             i.find('a').attr('href', self.itemLink(item));
         }
@@ -641,6 +641,7 @@
     items: 8,
     menu: '<ul class="typeahead dropdown-menu" role="listbox"></ul>',
     item: '<li><a class="dropdown-item" href="#" role="option"></a></li>',
+    itemContentSelector:'a',
     minLength: 1,
     scrollHeight: 0,
     autoSelect: true,
