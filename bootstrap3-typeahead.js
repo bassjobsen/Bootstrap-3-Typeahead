@@ -48,7 +48,7 @@
 
   var Typeahead = function (element, options) {
     this.$element = $(element);
-    this.options = $.extend({}, $.fn.typeahead.defaults, options);
+    this.options = $.extend({}, Typeahead.defaults, options);
     this.matcher = this.options.matcher || this.matcher;
     this.sorter = this.options.sorter || this.sorter;
     this.select = this.options.select || this.select;
@@ -57,6 +57,8 @@
     this.render = this.options.render || this.render;
     this.updater = this.options.updater || this.updater;
     this.displayText = this.options.displayText || this.displayText;
+    this.itemLink = this.options.itemLink || this.itemLink;
+    this.followLinkOnSelect = this.options.followLinkOnSelect || this.followLinkOnSelect;
     this.source = this.options.source;
     this.delay = this.options.delay;
     this.$menu = $(this.options.menu);
@@ -66,16 +68,20 @@
     this.listen();
     this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' || this.options.showHintOnFocus === "all" ? this.options.showHintOnFocus : false;
     this.afterSelect = this.options.afterSelect;
+    this.afterEmptySelect = this.options.afterEmptySelect;
     this.addItem = false;
     this.value = this.$element.val() || this.$element.text();
+    this.keyPressed = false;
+    this.focused = this.$element.is( ":focus" );
   };
 
   Typeahead.prototype = {
 
     constructor: Typeahead,
 
-    select: function () {
-      var val = this.$menu.find('.active').data('value');
+
+    setDefault: function (val) {
+      // var val = this.$menu.find('.active').data('value');
       this.$element.data('active', val);
       if (this.autoSelect || val) {
         var newVal = this.updater(val);
@@ -91,6 +97,37 @@
         this.afterSelect(newVal);
       }
       return this.hide();
+    },
+
+    select: function () {
+        var val = this.$menu.find('.active').data('value');
+
+        this.$element.data('active', val);
+        if (this.autoSelect || val) {
+            var newVal = this.updater(val);
+            // Updater can be set to any random functions via "options" parameter in constructor above.
+            // Add null check for cases when updater returns void or undefined.
+            if (!newVal) {
+              newVal = '';
+            }
+            this.$element
+              .val(this.displayText(newVal) || newVal)
+              .text(this.displayText(newVal) || newVal)
+              .change();
+            this.afterSelect(newVal);
+            if(this.followLinkOnSelect && this.itemLink(val)) {
+                document.location = this.itemLink(val);
+                this.afterSelect(newVal);
+            } else if(this.followLinkOnSelect && !this.itemLink(val)) {
+                this.afterEmptySelect(newVal);
+            } else {
+                this.afterSelect(newVal);
+            }
+        } else {
+            this.afterEmptySelect(newVal);
+        }
+
+        return this.hide();
     },
 
     updater: function (item) {
@@ -158,7 +195,7 @@
       if (typeof(query) != 'undefined' && query !== null) {
         this.query = query;
       } else {
-        this.query = this.$element.val() || this.$element.text() || '';
+        this.query = this.$element.val();
       }
 
       if (this.query.length < this.options.minLength && !this.options.showHintOnFocus) {
@@ -167,7 +204,12 @@
 
       var worker = $.proxy(function () {
 
-        if ($.isFunction(this.source)) {
+        // Bloodhound (since 0.11) needs three arguments. 
+        // Two of them are callback functions (sync and async) for local and remote data processing
+        // see https://github.com/twitter/typeahead.js/blob/master/src/bloodhound/bloodhound.js#L132
+        if ($.isFunction(this.source) && this.source.length === 3) {
+          this.source(this.query, $.proxy(this.process, this), $.proxy(this.process, this));
+        } else if ($.isFunction(this.source)) {
           this.source(this.query, $.proxy(this.process, this));
         } else if (this.source) {
           this.process(this.source);
@@ -197,16 +239,16 @@
         this.$element.data('active', null);
       }
 
+      if (this.options.items != 'all') {
+        items = items.slice(0, this.options.items);
+      }
+
       // Add item
       if (this.options.addItem){
         items.push(this.options.addItem);
       }
 
-      if (this.options.items == 'all') {
-        return this.render(items).show();
-      } else {
-        return this.render(items.slice(0, this.options.items)).show();
-      }
+      return this.render(items).show();
     },
 
     matcher: function (item) {
@@ -231,29 +273,41 @@
     },
 
     highlighter: function (item) {
-      var html = $('<div></div>');
-      var query = this.query;
-      var i = item.toLowerCase().indexOf(query.toLowerCase());
-      var len = query.length;
-      var leftPart;
-      var middlePart;
-      var rightPart;
-      var strong;
-      if (len === 0) {
-        return html.text(item).html();
+      var text = this.query;
+      if(text===""){
+        return item;
       }
-      while (i > -1) {
-        leftPart = item.substr(0, i);
-        middlePart = item.substr(i, len);
-        rightPart = item.substr(i + len);
-        strong = $('<strong></strong>').text(middlePart);
-        html
-          .append(document.createTextNode(leftPart))
-          .append(strong);
-        item = rightPart;
-        i = item.toLowerCase().indexOf(query.toLowerCase());
+      var matches = item.match(/(>)([^<]*)(<)/g);
+      var first = [];
+      var second = [];
+      var i;
+      if(matches && matches.length){
+        //html
+        for (i = 0; i < matches.length; ++i) {
+          if (matches[i].length > 2) {//escape '><'
+            first.push(matches[i]);
+          }
+        }
+      }else{
+        //text
+        first = [];
+        first.push(item);
       }
-      return html.append(document.createTextNode(item)).html();
+      text = text.replace((/[\(\)\/\.\*\+\?\[\]]/g), function(mat) {
+          return '\\' + mat;
+      });
+      var reg = new RegExp(text, "g");
+      var m;
+      for (i = 0; i < first.length; ++i) {
+        m = first[i].match(reg);
+        if(m && m.length>0){//find all text nodes matches
+          second.push(first[i]);
+        }
+      }
+      for (i = 0; i < second.length; ++i) {
+        item = item.replace(second[i],second[i].replace(reg, '<strong>$&</strong>'));
+      }
+      return item;
     },
 
     render: function (items) {
@@ -293,6 +347,9 @@
         var text = self.displayText(item);
         i = $(that.options.item).data('value', item);
         i.find(that.options.itemContentSelector).addBack(that.options.itemContentSelector).html(that.highlighter(text, item));
+        if(this.followLinkOnSelect) {
+            i.find('a').attr('href', self.itemLink(item));
+        }
         if (text == self.$element.val()) {
           i.addClass('active');
           self.$element.data('active', item);
@@ -310,7 +367,11 @@
     },
 
     displayText: function (item) {
-      return typeof item !== 'undefined' && typeof item.name != 'undefined' && item.name || item;
+      return typeof item !== 'undefined' && typeof item.name != 'undefined' ? item.name : item;
+    },
+
+    itemLink: function (item) {
+      return null;
     },
 
     next: function (event) {
@@ -318,10 +379,13 @@
       var next = active.next();
 
       if (!next.length) {
-        next = $(this.$menu.find('li')[0]);
+        next = $(this.$menu.find('button')[0]);
       }
 
       next.addClass('active');
+      // added for screen reader
+      var newVal = this.updater(next.data('value'));
+      this.$element.val(this.displayText(newVal) || newVal);
     },
 
     prev: function (event) {
@@ -329,10 +393,13 @@
       var prev = active.prev();
 
       if (!prev.length) {
-        prev = this.$menu.find('li').last();
+        prev = this.$menu.find('button').last();
       }
 
       prev.addClass('active');
+      // added for screen reader
+      var newVal = this.updater(prev.data('value'));
+      this.$element.val(this.displayText(newVal) || newVal);
     },
 
     listen: function () {
@@ -340,17 +407,24 @@
         .on('focus',    $.proxy(this.focus, this))
         .on('blur',     $.proxy(this.blur, this))
         .on('keypress', $.proxy(this.keypress, this))
-        .on('input',    $.proxy(this.input, this))
+        .on('propertychange input',    $.proxy(this.input, this))
         .on('keyup',    $.proxy(this.keyup, this));
 
       if (this.eventSupported('keydown')) {
         this.$element.on('keydown', $.proxy(this.keydown, this));
       }
 
-      this.$menu
-        .on('click', $.proxy(this.click, this))
-        .on('mouseenter', 'button', $.proxy(this.mouseenter, this))
-        .on('mousedown', $.proxy(this.mousedown,this));
+      if ('ontouchstart' in document.documentElement) {
+        this.$menu
+          .on('touchstart', 'button', $.proxy(this.touchstart, this))
+          .on('touchend', 'button', $.proxy(this.click, this));
+      } else {
+        this.$menu
+          .on('click', $.proxy(this.click, this))
+          .on('mouseenter', 'button', $.proxy(this.mouseenter, this))
+          .on('mouseleave', 'button', $.proxy(this.mouseleave, this))
+          .on('mousedown', $.proxy(this.mousedown,this));
+      }
     },
 
     destroy : function () {
@@ -360,7 +434,7 @@
         .off('focus')
         .off('blur')
         .off('keypress')
-        .off('input')
+        .off('propertychange input')
         .off('keyup');
 
       if (this.eventSupported('keydown')) {
@@ -407,6 +481,7 @@
     },
 
     keydown: function (e) {
+      this.keyPressed = true;
       this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27]);
       if (!this.shown && e.keyCode == 40) {
         this.lookup();
@@ -443,6 +518,9 @@
           break;
 
         case 9: // tab
+          if (!this.shown || (this.showHintOnFocus && !this.keyPressed)) return;
+          this.select();
+          break;
         case 13: // enter
           if (!this.shown) return;
           this.select();
@@ -454,12 +532,12 @@
           break;
       }
 
-
     },
 
     focus: function (e) {
       if (!this.focused) {
         this.focused = true;
+        this.keyPressed = false;
         if (this.options.showHintOnFocus && this.skipShowHintOnFocus !== true) {
           if(this.options.showHintOnFocus === "all") {
             this.lookup(""); 
@@ -475,8 +553,10 @@
 
     blur: function (e) {
       if (!this.mousedover && !this.mouseddown && this.shown) {
+        this.select();
         this.hide();
         this.focused = false;
+        this.keyPressed = false;
       } else if (this.mouseddown) {
         // This is for IE that blurs the input when user clicks on scroll.
         // We set the focus back on the input and prevent the lookup to occur again
@@ -516,6 +596,18 @@
       }.bind(this));
     },
 
+    touchstart: function (e) {
+      e.preventDefault();
+      this.$menu.find('.active').removeClass('active');
+      $(e.currentTarget).addClass('active');
+    },
+
+    touchend: function (e) {
+      e.preventDefault();
+      this.select();
+      this.$element.focus();
+    }
+
   };
 
 
@@ -544,17 +636,19 @@
     });
   };
 
-  $.fn.typeahead.defaults = {
+  Typeahead.defaults = {
     source: [],
     items: 8,
     menu: '<div class="typeahead dropdown-menu" role="listbox"></div>',
-    item: '<button class="dropdown-item" role="option"></button>',
+    item: '<button class="dropdown-item" type="button" role="option"></button',
     itemContentSelector:'.dropdown-item',
     minLength: 1,
     scrollHeight: 0,
     autoSelect: true,
     afterSelect: $.noop,
+    afterEmptySelect: $.noop,
     addItem: false,
+    followLinkOnSelect: false,
     delay: 0,
     separator: 'category',
     headerHtml: '<h6 class="dropdown-header"></h6>',
