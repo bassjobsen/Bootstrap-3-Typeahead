@@ -45,8 +45,8 @@ There is no additional CSS required to use the plugin. Bootstrap's CSS contains 
 
 ---
 
-```html
-<input type="text" data-provide="typeahead">
+```
+<input type="text" class="typeahead" data-provide="typeahead">
 ```
 
 You'll want to set `autocomplete="off"` to prevent default browser menus from appearing over the Bootstrap typeahead dropdown.
