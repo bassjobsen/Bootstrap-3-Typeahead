@@ -346,7 +346,7 @@
 
         var text = self.displayText(item);
         i = $(that.options.item).data('value', item);
-        i.find('a').html(that.highlighter(text, item));
+        i.find(that.options.itemContentSelector).addBack(that.options.itemContentSelector).html(that.highlighter(text, item));
         if(this.followLinkOnSelect) {
             i.find('a').attr('href', self.itemLink(item));
         }
@@ -379,7 +379,7 @@
       var next = active.next();
 
       if (!next.length) {
-        next = $(this.$menu.find('li')[0]);
+        next = $(this.$menu.find('button')[0]);
       }
 
       next.addClass('active');
@@ -393,7 +393,7 @@
       var prev = active.prev();
 
       if (!prev.length) {
-        prev = this.$menu.find('li').last();
+        prev = this.$menu.find('button').last();
       }
 
       prev.addClass('active');
@@ -416,13 +416,13 @@
 
       if ('ontouchstart' in document.documentElement) {
         this.$menu
-          .on('touchstart', 'li', $.proxy(this.touchstart, this))
-          .on('touchend', 'li', $.proxy(this.click, this));
+          .on('touchstart', 'button', $.proxy(this.touchstart, this))
+          .on('touchend', 'button', $.proxy(this.click, this));
       } else {
         this.$menu
           .on('click', $.proxy(this.click, this))
-          .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
-          .on('mouseleave', 'li', $.proxy(this.mouseleave, this))
+          .on('mouseenter', 'button', $.proxy(this.mouseenter, this))
+          .on('mouseleave', 'button', $.proxy(this.mouseleave, this))
           .on('mousedown', $.proxy(this.mousedown,this));
       }
     },
@@ -639,8 +639,9 @@
   Typeahead.defaults = {
     source: [],
     items: 8,
-    menu: '<ul class="typeahead dropdown-menu" role="listbox"></ul>',
-    item: '<li><a class="dropdown-item" href="#" role="option"></a></li>',
+    menu: '<div class="typeahead dropdown-menu" role="listbox"></div>',
+    item: '<button class="dropdown-item" type="button" role="option"></button',
+    itemContentSelector:'.dropdown-item',
     minLength: 1,
     scrollHeight: 0,
     autoSelect: true,
@@ -650,8 +651,8 @@
     followLinkOnSelect: false,
     delay: 0,
     separator: 'category',
-    headerHtml: '<li class="dropdown-header"></li>',
-    headerDivider: '<li class="divider" role="separator"></li>'
+    headerHtml: '<h6 class="dropdown-header"></h6>',
+    headerDivider: '<div class="dropdown-divider"></div>'
   };
 
   $.fn.typeahead.Constructor = Typeahead;
