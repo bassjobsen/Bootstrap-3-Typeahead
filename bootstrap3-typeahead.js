@@ -404,14 +404,14 @@
 
     listen: function () {
       this.$element
-        .on('focus',    $.proxy(this.focus, this))
-        .on('blur',     $.proxy(this.blur, this))
-        .on('keypress', $.proxy(this.keypress, this))
-        .on('propertychange input',    $.proxy(this.input, this))
-        .on('keyup',    $.proxy(this.keyup, this));
+        .on('focus.bootstrap3Typeahead',    $.proxy(this.focus, this))
+        .on('blur.bootstrap3Typeahead',     $.proxy(this.blur, this))
+        .on('keypress.bootstrap3Typeahead', $.proxy(this.keypress, this))
+        .on('propertychange.bootstrap3Typeahead input.bootstrap3Typeahead',    $.proxy(this.input, this))
+        .on('keyup.bootstrap3Typeahead',    $.proxy(this.keyup, this));
 
       if (this.eventSupported('keydown')) {
-        this.$element.on('keydown', $.proxy(this.keydown, this));
+        this.$element.on('keydown.bootstrap3Typeahead', $.proxy(this.keydown, this));
       }
 
       var itemTagName = $(this.options.item).prop('tagName')
@@ -432,14 +432,14 @@
       this.$element.data('typeahead',null);
       this.$element.data('active',null);
       this.$element
-        .off('focus')
-        .off('blur')
-        .off('keypress')
-        .off('propertychange input')
-        .off('keyup');
+        .unbind('focus.bootstrap3Typeahead')
+        .unbind('blur.bootstrap3Typeahead')
+        .unbind('keypress.bootstrap3Typeahead')
+        .unbind('propertychange.bootstrap3Typeahead input.bootstrap3Typeahead')
+        .unbind('keyup.bootstrap3Typeahead');
 
       if (this.eventSupported('keydown')) {
-        this.$element.off('keydown');
+        this.$element.unbind('keydown.bootstrap3-typeahead');
       }
 
       this.$menu.remove();
