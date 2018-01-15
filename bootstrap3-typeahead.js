@@ -58,6 +58,7 @@
     this.updater = this.options.updater || this.updater;
     this.displayText = this.options.displayText || this.displayText;
     this.itemLink = this.options.itemLink || this.itemLink;
+    this.itemTitle = this.options.itemTitle || this.itemTitle;
     this.followLinkOnSelect = this.options.followLinkOnSelect || this.followLinkOnSelect;
     this.source = this.options.source;
     this.delay = this.options.delay;
@@ -350,6 +351,7 @@
         if(this.followLinkOnSelect) {
             i.find('a').attr('href', self.itemLink(item));
         }
+        i.find('a').attr('title', self.itemTitle(item));
         if (text == self.$element.val()) {
           i.addClass('active');
           self.$element.data('active', item);
@@ -371,6 +373,10 @@
     },
 
     itemLink: function (item) {
+      return null;
+    },
+
+    itemTitle: function (item) {
       return null;
     },
 
