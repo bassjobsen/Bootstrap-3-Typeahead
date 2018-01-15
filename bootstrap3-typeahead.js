@@ -379,7 +379,7 @@
       var next = active.next();
 
       if (!next.length) {
-        next = $(this.$menu.find('li')[0]);
+        next = $(this.$menu.find($(this.options.item).prop('tagName'))[0]);
       }
 
       next.addClass('active');
@@ -393,7 +393,7 @@
       var prev = active.prev();
 
       if (!prev.length) {
-        prev = this.$menu.find('li').last();
+        prev = this.$menu.find($(this.options.item).prop('tagName')).last();
       }
 
       prev.addClass('active');
@@ -414,15 +414,16 @@
         this.$element.on('keydown.bootstrap3Typeahead', $.proxy(this.keydown, this));
       }
 
+      var itemTagName = $(this.options.item).prop('tagName')
       if ('ontouchstart' in document.documentElement) {
         this.$menu
-          .on('touchstart', 'li', $.proxy(this.touchstart, this))
-          .on('touchend', 'li', $.proxy(this.click, this));
+          .on('touchstart', itemTagName, $.proxy(this.touchstart, this))
+          .on('touchend', itemTagName, $.proxy(this.click, this));
       } else {
         this.$menu
           .on('click', $.proxy(this.click, this))
-          .on('mouseenter', 'li', $.proxy(this.mouseenter, this))
-          .on('mouseleave', 'li', $.proxy(this.mouseleave, this))
+          .on('mouseenter', itemTagName, $.proxy(this.mouseenter, this))
+          .on('mouseleave', itemTagName, $.proxy(this.mouseleave, this))
           .on('mousedown', $.proxy(this.mousedown,this));
       }
     },
