@@ -61,7 +61,8 @@
     this.followLinkOnSelect = this.options.followLinkOnSelect || this.followLinkOnSelect;
     this.source = this.options.source;
     this.delay = this.options.delay;
-    this.$menu = $(this.options.menu);
+    this.theme = this.option.theme && this.options.themes && this.options.themes[this.options.theme] || Typeahead.defaults.themes[Typeahead.defaults.theme];
+    this.$menu = $(this.options.menu || theme.menu);
     this.$appendTo = this.options.appendTo ? $(this.options.appendTo) : null;
     this.fitToElement = typeof this.options.fitToElement == 'boolean' ? this.options.fitToElement : false;
     this.shown = false;
@@ -337,16 +338,18 @@
 
       items = $(data).map(function (i, item) {
         if ((item.__type || false) == 'category'){
-          return $(that.options.headerHtml).text(item.name)[0];
+          return $(that.options.headerHtml || that.theme.headerHtml).text(item.name)[0];
         }
 
         if ((item.__type || false) == 'divider'){
-          return $(that.options.headerDivider)[0];
+          return $(that.options.headerDivider || that.theme.headerDivider)[0];
         }
 
         var text = self.displayText(item);
-        i = $(that.options.item).data('value', item);
-        i.find(that.options.itemContentSelector).addBack(that.options.itemContentSelector).html(that.highlighter(text, item));
+        i = $(that.options.item || that.theme.item).data('value', item);
+        i.find(that.options.itemContentSelector || that.theme.itemContentSelector)
+         .addBack(that.options.itemContentSelector || that.theme.itemContentSelector)
+         .html(that.highlighter(text, item));
         if(this.followLinkOnSelect) {
             i.find('a').attr('href', self.itemLink(item));
         }
@@ -379,7 +382,7 @@
       var next = active.next();
 
       if (!next.length) {
-        next = $(this.$menu.find($(this.options.item).prop('tagName'))[0]);
+        next = $(this.$menu.find($(this.options.item || this.theme.item).prop('tagName'))[0]);
       }
 
       next.addClass('active');
@@ -393,7 +396,7 @@
       var prev = active.prev();
 
       if (!prev.length) {
-        prev = this.$menu.find($(this.options.item).prop('tagName')).last();
+        prev = this.$menu.find($(this.options.item || this.theme.item).prop('tagName')).last();
       }
 
       prev.addClass('active');
@@ -414,7 +417,7 @@
         this.$element.on('keydown.bootstrap3Typeahead', $.proxy(this.keydown, this));
       }
 
-      var itemTagName = $(this.options.item).prop('tagName')
+      var itemTagName = $(this.options.item || this.theme.item).prop('tagName')
       if ('ontouchstart' in document.documentElement) {
         this.$menu
           .on('touchstart', itemTagName, $.proxy(this.touchstart, this))
@@ -640,9 +643,6 @@
   Typeahead.defaults = {
     source: [],
     items: 8,
-    menu: '<ul class="typeahead dropdown-menu" role="listbox"></ul>',
-    item: '<li><a class="dropdown-item" href="#" role="option"></a></li>',
-    itemContentSelector:'a',
     minLength: 1,
     scrollHeight: 0,
     autoSelect: true,
@@ -652,8 +652,23 @@
     followLinkOnSelect: false,
     delay: 0,
     separator: 'category',
-    headerHtml: '<li class="dropdown-header"></li>',
-    headerDivider: '<li class="divider" role="separator"></li>'
+    theme: "bootstrap3",
+    themes: {
+      bootstrap3: {
+        menu: '<ul class="typeahead dropdown-menu" role="listbox"></ul>',
+        item: '<li><a class="dropdown-item" href="#" role="option"></a></li>',
+        itemContentSelector: "a",
+        headerHtml: '<li class="dropdown-header"></li>',
+        headerDivider: '<li class="divider" role="separator"></li>'
+      },     
+      bootstrap4: {
+        menu: '<div class="typeahead dropdown-menu" role="listbox"></div>',
+        item: '<button class="dropdown-item" role="option"></button>',
+        itemContentSelector: '.dropdown-item',
+        headerHtml: '<h6 class="dropdown-header"></h6>',
+        headerDivider: '<div class="dropdown-divider"></div>'
+      } 
+    }
   };
 
   $.fn.typeahead.Constructor = Typeahead;
