@@ -61,8 +61,8 @@
     this.followLinkOnSelect = this.options.followLinkOnSelect || this.followLinkOnSelect;
     this.source = this.options.source;
     this.delay = this.options.delay;
-    this.theme = this.option.theme && this.options.themes && this.options.themes[this.options.theme] || Typeahead.defaults.themes[Typeahead.defaults.theme];
-    this.$menu = $(this.options.menu || theme.menu);
+    this.theme = this.options.theme && this.options.themes && this.options.themes[this.options.theme] || Typeahead.defaults.themes[Typeahead.defaults.theme];
+    this.$menu = $(this.options.menu || this.theme.menu);
     this.$appendTo = this.options.appendTo ? $(this.options.appendTo) : null;
     this.fitToElement = typeof this.options.fitToElement == 'boolean' ? this.options.fitToElement : false;
     this.shown = false;
