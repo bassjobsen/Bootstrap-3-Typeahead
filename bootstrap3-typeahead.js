@@ -491,6 +491,15 @@
     },
 
     keydown: function (e) {
+      /**
+       * Prevent to make an ajax call while copying and pasting.
+       *
+       * @author Simone Sacchi
+       * @version 2018/01/18
+       */
+      if (e.keyCode === 17) { // ctrl
+        return;
+      }
       this.keyPressed = true;
       this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27]);
       if (!this.shown && e.keyCode == 40) {
