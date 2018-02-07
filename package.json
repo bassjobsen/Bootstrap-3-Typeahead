@@ -14,7 +14,7 @@
   "author": "Bass Jobsen",
   "scripts": {
     "test": "grunt test",
-    "uglify" : "uglifyjs ./bootstrap3-typeahead.js --output ./bootstrap3-typeahead.min.js --warn --compress drop_console=true"
+    "uglify": "uglifyjs ./bootstrap3-typeahead.js --output ./bootstrap3-typeahead.min.js --warn --compress drop_console=true"
   },
   "repository": {
     "type": "git",
@@ -33,9 +33,6 @@
   },
   "engines": {
     "node": "~0.10.1"
-  },
-  "bin": {
-    "grunt": "./node_modules/grunt/lib/grunt.js"
   },
   "dependencies": {
     "uglify-js": "^3.3.7"
