@@ -118,6 +118,8 @@ $input.change(function() {
 
 Options can be passed via data attributes or JavaScript. For data attributes, append the option name to `data-`, as in `data-source=""`.
 
+If you are using jQuery in your application, note that camel case attributes such as `data-minLength` should be formatted as `data-min-length`. If you want more explanation, see [this issue](https://github.com/bassjobsen/Bootstrap-3-Typeahead/issues/28).
+
 |Name|Type|Default|Description|
 |--- |--- |--- |--- |
 |source|array, function|`[]`|The data source to query against. May be an array of strings, an array of JSON object with a name property or a function. The function accepts two arguments, the query value in the input field and the process callback. The function may be used synchronously by returning the data source directly or asynchronously via the process callback's single argument.|
