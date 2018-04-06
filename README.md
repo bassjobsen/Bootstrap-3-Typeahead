@@ -136,6 +136,11 @@ Options can be passed via data attributes or JavaScript. For data attributes, ap
 |appendTo|jQuery element|`null`|By defaut, the menu is added right after the input element. Use this option to add the menu to another div. It should not be used if you want to use bootstrap dropup or dropdown-menu-right classes.|
 |fitToElement|boolean|`false`|Set to true if you want the menu to be the same size than the input it is attached to.|
 |addItem|JSON object|`false`|Adds an item to the end of the list, for example "New Entry". This could be used, for example, to pop a dialog when an item is not found in the list of data. Example: http://cl.ly/image/2u170I1q1G3A/addItem.png|
+|changeInputOnSelect|boolean|`true`|Put the selected value text representation in the input|
+|changeInputOnMove|boolean|`true`|Put the active value text representation in the input|
+|openLinkInNewTab|boolean|`false`|Open links in a new window/tab|
+|selectOnBlur|boolean|`true`|Automatically select the active value on blur|
+|showCategoryHeader|boolean|`true`|Show categories header in the dropdown menu|
 
 ## Methods
 
