@@ -351,7 +351,7 @@
         i.find(that.options.itemContentSelector || that.theme.itemContentSelector)
          .addBack(that.options.itemContentSelector || that.theme.itemContentSelector)
          .html(that.highlighter(text, item));
-        if(this.followLinkOnSelect) {
+        if(that.options.followLinkOnSelect) {
             i.find('a').attr('href', self.itemLink(item));
         }
         i.find('a').attr('title', self.itemTitle(item));
