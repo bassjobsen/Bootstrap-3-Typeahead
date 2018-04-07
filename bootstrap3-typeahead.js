@@ -454,11 +454,19 @@
             }
 
             var itemTagName = $(this.options.item || this.theme.item).prop('tagName');
-            if ('ontouchstart' in document.documentElement) {
-                this.$menu
-                    .on('touchstart', itemTagName, $.proxy(this.touchstart, this))
-                    .on('touchend', itemTagName, $.proxy(this.click, this));
-            } else {
+            if ('ontouchstart' in document.documentElement && 'onmousemove' in document.documentElement) {
+		        this.$menu
+		            .on('touchstart', itemTagName, $.proxy(this.touchstart, this))
+		            .on('touchend', itemTagName, $.proxy(this.click, this))
+		            .on('click', $.proxy(this.click, this))
+		            .on('mouseenter', itemTagName, $.proxy(this.mouseenter, this))
+		            .on('mouseleave', itemTagName, $.proxy(this.mouseleave, this))
+		            .on('mousedown', $.proxy(this.mousedown,this));
+	        } else if ('ontouchstart' in document.documentElement) {
+		        this.$menu
+		            .on('touchstart', itemTagName, $.proxy(this.touchstart, this))
+		            .on('touchend', itemTagName, $.proxy(this.click, this));
+	        } else {
                 this.$menu
                     .on('click', $.proxy(this.click, this))
                     .on('mouseenter', itemTagName, $.proxy(this.mouseenter, this))
