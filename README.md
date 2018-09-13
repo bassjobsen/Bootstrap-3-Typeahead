@@ -130,8 +130,9 @@ If you are using jQuery in your application, note that camel case attributes suc
 |matcher|function|case insensitive|The method used to determine if a query matches an item. Accepts a single argument, the item against which to test the query. Access the current query with this.query. Return a boolean true if query is a match.|
 |sorter|function|exact match, case sensitive, case insensitive|Method used to sort autocomplete results. Accepts a single argument items and has the scope of the typeahead instance. Reference the current query with this.query.|
 |updater|function|returns selected item|The method used to return selected item. Accepts a single argument, the item and has the scope of the typeahead instance.|
-|highlighter|function|highlights all default matches|Method used to highlight autocomplete results. Accepts a single argument item and has the scope of the typeahead instance. Should return html.|
+|highlighter|function|highlights all default matches|Method used to highlight autocomplete results. Accepts two arguments: the display text and the current item object and has the scope of the typeahead instance. Should return html.|
 |displayText|function|`item.name \|\| item`|Method used to get textual representation of an item of the sources. Accepts a single argument item and has the scope of the typeahead instance. Should return a String.|
+|afterRender|function|$.noop()|Call back function executed after the typeahead element has been rendered.|
 |autoSelect|boolean|`true`|Allows you to dictate whether or not the first suggestion is selected automatically. Turning autoselect off also means that the input won't clear if nothing is selected and enter or tab is hit.|
 |afterSelect|function|`$.noop()`|Call back function to execute after selected an item. It gets the current active item in parameter if any.|
 |delay|integer|`0`|Adds a delay between lookups.|

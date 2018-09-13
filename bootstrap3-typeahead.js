@@ -71,6 +71,7 @@
         this.showHintOnFocus = typeof this.options.showHintOnFocus == 'boolean' || this.options.showHintOnFocus === 'all' ? this.options.showHintOnFocus : false;
         this.afterSelect = this.options.afterSelect;
         this.afterEmptySelect = this.options.afterEmptySelect;
+        this.afterRender = this.options.afterRender;
         this.addItem = false;
         this.value = this.$element.val() || this.$element.text();
         this.keyPressed = false;
@@ -195,6 +196,8 @@
             }
 
             this.shown = true;
+            this.afterRender();
+
             return this;
         },
 
@@ -721,6 +724,7 @@
         autoSelect: true,
         afterSelect: $.noop,
         afterEmptySelect: $.noop,
+        afterRender: $.noop,
         addItem: false,
         followLinkOnSelect: false,
         delay: 0,
