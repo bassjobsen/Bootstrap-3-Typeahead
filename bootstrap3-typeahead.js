@@ -342,7 +342,7 @@
                     });
                 }
 
-                if (this.showCategoryHeader) {
+                if (that.showCategoryHeader) {
                     // inject category header
                     if (value[_category] && (key === 0 || value[_category] !== items[key - 1][_category])) {
                         data.push({
