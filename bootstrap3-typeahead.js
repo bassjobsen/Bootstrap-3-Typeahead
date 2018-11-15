@@ -406,7 +406,11 @@
             var next = active.next();
 
             if (!next.length) {
-                next = $(this.$menu.find($(this.options.item || this.theme.item).prop('tagName'))[0]);
+                if (this.options.carousel) {
+                    next = $(this.$menu.find($(this.options.item || this.theme.item).prop('tagName'))[0]);
+                } else {
+                    next = active; // stop at end of list
+                }
             }
 
             while (next.hasClass('divider') || next.hasClass('dropdown-header')) {
@@ -419,6 +423,14 @@
             if (this.changeInputOnMove) {
                 this.$element.val(this.displayText(newVal) || newVal);
             }
+
+            // added to scroll parent container
+            var offset_in_list = next.offset().top - next.closest('ul').offset().top;
+            var item_height = next.outerHeight();
+
+            if (offset_in_list > next.closest('ul').height()) {
+                next.closest('ul').scrollTop(next.closest('ul').scrollTop() + item_height);
+            }
         },
 
         prev: function (event) {
@@ -426,7 +438,11 @@
             var prev = active.prev();
 
             if (!prev.length) {
-                prev = this.$menu.find($(this.options.item || this.theme.item).prop('tagName')).last();
+                if (this.options.carousel) {
+                    prev = this.$menu.find($(this.options.item || this.theme.item).prop('tagName')).last();
+                } else {
+                    prev = active; // stop at start of list
+                }
             }
 
             while (prev.hasClass('divider') || prev.hasClass('dropdown-header')) {
@@ -438,6 +454,14 @@
             var newVal = this.updater(prev.data('value'));
             if (this.changeInputOnMove) {
                 this.$element.val(this.displayText(newVal) || newVal);
+            }
+
+            // added to scroll parent container
+            var offset_in_list = prev.offset().top - prev.closest('ul').offset().top;
+            var item_height = prev.outerHeight();
+
+            if (offset_in_list < 0) {
+                prev.closest('ul').scrollTop(prev.closest('ul').scrollTop() - item_height);
             }
         },
 
@@ -716,6 +740,7 @@
     Typeahead.defaults = {
         source: [],
         items: 8,
+        carousel: true,
         minLength: 1,
         scrollHeight: 0,
         autoSelect: true,
