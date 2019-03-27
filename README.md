@@ -133,7 +133,7 @@ If you are using jQuery in your application, note that camel case attributes suc
 |highlighter|function|highlights all default matches|Method used to highlight autocomplete results. Accepts a single argument item and has the scope of the typeahead instance. Should return html.|
 |displayText|function|`item.name \|\| item`|Method used to get textual representation of an item of the sources. Accepts a single argument item and has the scope of the typeahead instance. Should return a String.|
 |autoSelect|boolean|`true`|Allows you to dictate whether or not the first suggestion is selected automatically. Turning autoselect off also means that the input won't clear if nothing is selected and enter or tab is hit.|
-|afterSelect|function|`$.noop()`|Call back function to execute after selected an item. It gets the current active item in parameter if any.|
+|afterSelect|function|`$.noop()`|Call back function to execute after selected an item. It gets the current active item in parameter if any and a reference of the target object.|
 |delay|integer|`0`|Adds a delay between lookups.|
 |appendTo|jQuery element|`null`|By defaut, the menu is added right after the input element. Use this option to add the menu to another div. It should not be used if you want to use bootstrap dropup or dropdown-menu-right classes.|
 |fitToElement|boolean|`false`|Set to true if you want the menu to be the same size than the input it is attached to.|
