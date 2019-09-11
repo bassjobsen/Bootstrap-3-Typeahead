@@ -374,7 +374,7 @@
                     }
                     i.find('a').attr('title', self.itemTitle(item));
                     if (text == self.$element.val()) {
-                        i.addClass('active');
+                        i.addClass('active').find('a').addClass('active');
                         self.$element.data('active', item);
                         activeFound = true;
                     }
@@ -382,7 +382,7 @@
                 });
 
             if (this.autoSelect && !activeFound) {
-                items.filter(':not(.dropdown-header)').first().addClass('active');
+                items.filter(':not(.dropdown-header)').first().addClass('active').find('a').addClass('active');
                 this.$element.data('active', items.first().data('value'));
             }
             this.$menu.html(items);
@@ -413,7 +413,7 @@
                 next = next.next();
             }
 
-            next.addClass('active');
+            next.addClass('active').find('a').addClass('active');
             // added for screen reader
             var newVal = this.updater(next.data('value'));
             if (this.changeInputOnMove) {
@@ -433,7 +433,7 @@
                 prev = prev.prev();
             }
 
-            prev.addClass('active');
+            prev.addClass('active').find('a').addClass('active');
             // added for screen reader
             var newVal = this.updater(prev.data('value'));
             if (this.changeInputOnMove) {
@@ -650,7 +650,7 @@
         mouseenter: function (e) {
             this.mousedover = true;
             this.$menu.find('.active').removeClass('active');
-            $(e.currentTarget).addClass('active');
+            $(e.currentTarget).addClass('active').find('a').addClass('active');
         },
 
         mouseleave: function (e) {
@@ -674,7 +674,7 @@
         touchstart: function (e) {
             e.preventDefault();
             this.$menu.find('.active').removeClass('active');
-            $(e.currentTarget).addClass('active');
+            $(e.currentTarget).addClass('active').find('a').addClass('active');
         },
 
         touchend: function (e) {
