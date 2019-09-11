@@ -415,10 +415,10 @@
 
             next.addClass('active');
             // added for screen reader
-            var newVal = this.updater(next.data('value'));
-            if (this.changeInputOnMove) {
-                this.$element.val(this.displayText(newVal) || newVal);
-            }
+            //var newVal = this.updater(next.data('value'));
+            //if (this.changeInputOnMove) {
+            //    this.$element.val(this.displayText(newVal) || newVal);
+            //}
         },
 
         prev: function (event) {
@@ -435,10 +435,10 @@
 
             prev.addClass('active');
             // added for screen reader
-            var newVal = this.updater(prev.data('value'));
-            if (this.changeInputOnMove) {
-                this.$element.val(this.displayText(newVal) || newVal);
-            }
+            //var newVal = this.updater(prev.data('value'));
+            //if (this.changeInputOnMove) {
+            //    this.$element.val(this.displayText(newVal) || newVal);
+            //}
         },
 
         listen: function () {
