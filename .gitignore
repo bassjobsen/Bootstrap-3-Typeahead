@@ -40,3 +40,6 @@ validation-status.json
 # Folders to ignore
 bower_components
 node_modules
+
+# NPM stuff to ignore because we are a library
+/package-lock.json

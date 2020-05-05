@@ -79,6 +79,7 @@
         this.changeInputOnMove = this.options.changeInputOnMove || this.changeInputOnMove;
         this.openLinkInNewTab = this.options.openLinkInNewTab || this.openLinkInNewTab;
         this.selectOnBlur = this.options.selectOnBlur || this.selectOnBlur;
+        this.selectOnTab = this.options.selectOnTab;
         this.showCategoryHeader = this.options.showCategoryHeader || this.showCategoryHeader;
     };
 
@@ -510,6 +511,10 @@
 
             switch (e.keyCode) {
                 case 9: // tab
+                    if (this.selectOnTab) {
+                        e.preventDefault();
+                    }
+                    break;
                 case 13: // enter
                 case 27: // escape
                     e.preventDefault();
@@ -584,7 +589,7 @@
                     break;
 
                 case 9: // tab
-                    if (!this.shown || (this.showHintOnFocus && !this.keyPressed)) {
+                    if (!this.selectOnTab || !this.shown || (this.showHintOnFocus && !this.keyPressed)) {
                         return;
                     }
                     this.select();
@@ -730,6 +735,7 @@
         changeInputOnMove: true,
         openLinkInNewTab: false,
         selectOnBlur: true,
+        selectOnTab: true,
         showCategoryHeader: true,
         theme: "bootstrap3",
         themes: {
