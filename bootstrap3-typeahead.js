@@ -488,7 +488,7 @@
                 .unbind('keyup.bootstrap3Typeahead');
 
             if (this.eventSupported('keydown')) {
-                this.$element.unbind('keydown.bootstrap3-typeahead');
+                this.$element.unbind('keydown.bootstrap3Typeahead');
             }
 
             this.$menu.remove();
@@ -504,6 +504,9 @@
             return isSupported;
         },
 
+        /**
+          * @param e {KeyboardEvent} keydown event
+         */
         move: function (e) {
             if (!this.shown) {
                 return;
@@ -513,6 +516,8 @@
                 case 9: // tab
                     if (this.selectOnTab) {
                         e.preventDefault();
+                    } else {
+                        this.hide();
                     }
                     break;
                 case 13: // enter
@@ -540,6 +545,9 @@
             }
         },
 
+        /**
+         * @param e {KeyboardEvent} keydown event
+         */
         keydown: function (e) {
             /**
              * Prevent to make an ajax call while copying and pasting.
@@ -552,7 +560,7 @@
             }
             this.keyPressed = true;
             this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40, 38, 9, 13, 27]);
-            if (!this.shown && e.keyCode == 40) {
+            if (!this.shown && e.keyCode === 40) {
                 this.lookup();
             } else {
                 this.move(e);
@@ -589,6 +597,9 @@
                     break;
 
                 case 9: // tab
+                    if (!this.selectOnTab) {
+                        e.preventDefault();
+                    }
                     if (!this.selectOnTab || !this.shown || (this.showHintOnFocus && !this.keyPressed)) {
                         return;
                     }
