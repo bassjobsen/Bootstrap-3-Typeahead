@@ -1,6 +1,8 @@
 <!doctype html>
 <html>
 	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="https://unpkg.com/bootstrap@3.4.1/dist/css/bootstrap.css">
 	</head>
 	<body>
@@ -8,8 +10,25 @@
 
 		<h1>Example</h1>
 
-		<div id="the-basics">
-			<input class="typeahead" type="text" placeholder="States of USA">
+		<div class="row">
+		<div class="col-md-6 col-sm-9">
+
+		<form class="form">
+			<div class="form-group">
+				<label for="text1">Plain text field 1</label>
+				<input id="text1" class="form-control" type="text">
+			</div>
+			<div class="form-group">
+				<label for="states-complete">US States</label>
+				<input id="states-complete" class="typeahead form-control" type="text" placeholder="States of USA">
+			</div>
+			<div class="form-group">
+				<label for="text2">Plain text field 2</label>
+				<input id="text2" class="form-control" type="text">
+			</div>
+		</form>
+
+		</div>
 		</div>
 
 		<script type="text/javascript" src="https://unpkg.com/jquery@3.5.1/dist/jquery.js"></script>
