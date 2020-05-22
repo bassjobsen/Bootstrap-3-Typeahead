@@ -257,7 +257,7 @@
         process: function (items) {
             var that = this;
 
-            const oldItems = this.prevItems;
+            var oldItems = this.prevItems;
             this.prevItems = items;
             this.onItemsChanged(oldItems || [], items);
 
@@ -365,8 +365,8 @@
 
         onItemsChanged: function (oldItems, newItems) {
             // Calculate number of visible items
-            const oldItemsShown = this._limitListSize(oldItems);
-            const newItemsShown = this._limitListSize(newItems);
+            var oldItemsShown = this._limitListSize(oldItems);
+            var newItemsShown = this._limitListSize(newItems);
             // Only update live region if it changes between empty and non-empty.
             if (!oldItemsShown.length && newItemsShown.length) {
                 this._setLiveStatus(newItemsShown.length + ' results, use arrow keys');
@@ -413,15 +413,18 @@
                     }
 
                     var text = self.displayText(item);
+                    var itemTitle = self.itemTitle(item);
+                    // try item title, fall back to displayText (stripping any markup)
+                    var ariaLabel = itemTitle || $('<div></div>').html(text).text();
                     i = $(that.options.item || that.theme.item).data('value', item);
                     i.find(that.options.itemContentSelector || that.theme.itemContentSelector)
                         .addBack(that.options.itemContentSelector || that.theme.itemContentSelector)
-                        .attr('aria-label', text) // highlighted text can get... interesting pronunciation
+                        .attr('aria-label', ariaLabel) // highlighted text can get... interesting pronunciation
                         .html(that.highlighter(text, item));
                     if(that.options.followLinkOnSelect) {
                         i.find('a').attr('href', self.itemLink(item));
                     }
-                    i.find('a').attr('title', self.itemTitle(item));
+                    i.find('a').attr('title', itemTitle);
 
                     if (text == self.$element.val()) {
                         self._markActive(i);
@@ -439,6 +442,9 @@
             return this;
         },
 
+        /**
+         * @returns {string} which could be HTML
+         */
         displayText: function (item) {
             return typeof item !== 'undefined' && typeof item.name != 'undefined' ? item.name : item;
         },
