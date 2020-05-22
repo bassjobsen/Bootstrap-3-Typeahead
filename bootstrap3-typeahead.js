@@ -30,7 +30,7 @@
      * A random ID, needed for some accessibility feature
      */
     function newId() {
-        return `gen-id-${idCounter++}`;
+        return 'gen-id-' + idCounter++;
     }
     /**
      * Return the ID of a given HTML element, generating one if necessary.
@@ -369,9 +369,9 @@
             const newItemsShown = this._limitListSize(newItems);
             // Only update live region if it changes between empty and non-empty.
             if (!oldItemsShown.length && newItemsShown.length) {
-                this._setLiveStatus(`${newItemsShown.length} results, use arrow keys`);
+                this._setLiveStatus(newItemsShown.length + ' results, use arrow keys');
             } else if (oldItemsShown.length && !newItemsShown.length) {
-                this._setLiveStatus(`No results, try another query`);
+                this._setLiveStatus('No results, try another query');
             }
         },
 
