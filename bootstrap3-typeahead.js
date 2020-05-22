@@ -1,22 +1,5 @@
 /* =============================================================
- * bootstrap3-typeahead.js v4.0.2
- * https://github.com/bassjobsen/Bootstrap-3-Typeahead
- * =============================================================
- * Original written by @mdo and @fat
- * =============================================================
- * Copyright 2014 Bass Jobsen @bassjobsen
- *
- * Licensed under the Apache License, Version 2.0 (the 'License');
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an 'AS IS' BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * bootstrap3-typeahead.js
  * ============================================================ */
 
 
@@ -42,6 +25,33 @@
     'use strict';
     // jshint laxcomma: true
 
+    var idCounter = 100000;
+    /**
+     * A random ID, needed for some accessibility feature
+     */
+    function newId() {
+        return 'gen-id-' + idCounter++;
+    }
+    /**
+     * Return the ID of a given HTML element, generating one if necessary.
+     * @param {HTMLElement} element
+     */
+    function getOrGenId(element) {
+        var id = element.getAttribute('id');
+        if (!id) {
+            id = newId();
+            element.setAttribute('id', id);
+        }
+        return id;
+    }
+
+    function plainText(htmlString) {
+        const $html = $('<div></div>').html(htmlString);
+        // ensure we have a space between common block level elements,
+        // or else words can run together
+        $html.find('div,p,section,h1,h2,h3,h4,h5,h6').append(' ');
+        return $html.text();
+    }
 
     /* TYPEAHEAD PUBLIC CLASS DEFINITION
      * ================================= */
@@ -81,6 +91,18 @@
         this.selectOnBlur = this.options.selectOnBlur || this.selectOnBlur;
         this.selectOnTab = this.options.selectOnTab;
         this.showCategoryHeader = this.options.showCategoryHeader || this.showCategoryHeader;
+        this.prevItems = [];
+        this.$statusRegion = $('<div></div>').addClass('sr-only').attr({
+            'role': 'status',
+            'aria-live': 'polite' // implied but recommended for compatiblity
+        });
+        this.$element.after(this.$statusRegion);
+
+        this.$element.attr({
+            'role': 'combobox',
+            'aria-autocomplete': 'both',
+            'aria-haspopup': 'listbox'
+        });
     };
 
     Typeahead.prototype = {
@@ -108,7 +130,8 @@
         },
 
         select: function () {
-            var val = this.$menu.find('.active').data('value');
+            var $activeElement = this.$menu.find('.active');
+            var val = $activeElement.data('value');
 
             this.$element.data('active', val);
             if (this.autoSelect || val) {
@@ -196,12 +219,17 @@
             }
 
             this.shown = true;
+            this.$element.attr('aria-expanded', 'true');
+            this.$element.attr('aria-owns', getOrGenId(element[0]));
             return this;
         },
 
         hide: function () {
             this.$menu.hide();
+            this.prevItems = [];
             this.shown = false;
+            this.$element.attr('aria-expanded', 'false');
+            this.$element.attr('aria-activedescendant', null);
             return this;
         },
 
@@ -237,6 +265,10 @@
         process: function (items) {
             var that = this;
 
+            var oldItems = this.prevItems;
+            this.prevItems = items;
+            this.onItemsChanged(oldItems || [], items);
+
             items = $.grep(items, function (item) {
                 return that.matcher(item);
             });
@@ -253,9 +285,7 @@
                 this.$element.data('active', null);
             }
 
-            if (this.options.items != 'all') {
-                items = items.slice(0, this.options.items);
-            }
+            items = this._limitListSize(items);
 
             // Add item
             if (this.options.addItem) {
@@ -263,6 +293,19 @@
             }
 
             return this.render(items).show();
+        },
+
+        /**
+         * @summary Reduce results list to max results
+         * @param {string[]} items The items to reduce
+         * @returns A reduced list if items is a number, or the original list if it's 'all'
+         */
+        _limitListSize: function(items) {
+            if (this.options.items === 'all') {
+                return items;
+            } else {
+                return items.slice(0, this.options.items);
+            }
         },
 
         matcher: function (item) {
@@ -328,6 +371,18 @@
             return item;
         },
 
+        onItemsChanged: function (oldItems, newItems) {
+            // Calculate number of visible items
+            var oldItemsShown = this._limitListSize(oldItems);
+            var newItemsShown = this._limitListSize(newItems);
+            // Only update live region if it changes between empty and non-empty.
+            if (!oldItemsShown.length && newItemsShown.length) {
+                this._setLiveStatus(newItemsShown.length + ' results, use arrow keys');
+            } else if (oldItemsShown.length && !newItemsShown.length) {
+                this._setLiveStatus('No results, try another query');
+            }
+        },
+
         render: function (items) {
             var that = this;
             var self = this;
@@ -366,16 +421,21 @@
                     }
 
                     var text = self.displayText(item);
+                    var itemTitle = self.itemTitle(item);
+                    // try item title, fall back to displayText (stripping any markup)
+                    var ariaLabel = itemTitle || plainText(text);
                     i = $(that.options.item || that.theme.item).data('value', item);
                     i.find(that.options.itemContentSelector || that.theme.itemContentSelector)
                         .addBack(that.options.itemContentSelector || that.theme.itemContentSelector)
+                        .attr('aria-label', ariaLabel) // highlighted text can get... interesting pronunciation
                         .html(that.highlighter(text, item));
                     if(that.options.followLinkOnSelect) {
                         i.find('a').attr('href', self.itemLink(item));
                     }
-                    i.find('a').attr('title', self.itemTitle(item));
+                    i.find('a').attr('title', itemTitle);
+
                     if (text == self.$element.val()) {
-                        i.addClass('active');
+                        self._markActive(i);
                         self.$element.data('active', item);
                         activeFound = true;
                     }
@@ -383,13 +443,16 @@
                 });
 
             if (this.autoSelect && !activeFound) {
-                items.filter(':not(.dropdown-header)').first().addClass('active');
+                this._markActive(items.filter(':not(.dropdown-header)').first());
                 this.$element.data('active', items.first().data('value'));
             }
             this.$menu.html(items);
             return this;
         },
 
+        /**
+         * @returns {string} which could be HTML
+         */
         displayText: function (item) {
             return typeof item !== 'undefined' && typeof item.name != 'undefined' ? item.name : item;
         },
@@ -402,8 +465,14 @@
             return null;
         },
 
+        _markActive: function($li) {
+            $li.addClass('active');
+            $li.attr('aria-selected', 'true')
+            this.$element.attr('aria-activedescendant', getOrGenId($li[0]));
+        },
+
         next: function (event) {
-            var active = this.$menu.find('.active').removeClass('active');
+            var active = this.$menu.find('.active').removeClass('active').attr('aria-selected', 'false');
             var next = active.next();
 
             if (!next.length) {
@@ -414,7 +483,7 @@
                 next = next.next();
             }
 
-            next.addClass('active');
+            this._markActive(next);
             // added for screen reader
             var newVal = this.updater(next.data('value'));
             if (this.changeInputOnMove) {
@@ -423,7 +492,7 @@
         },
 
         prev: function (event) {
-            var active = this.$menu.find('.active').removeClass('active');
+            var active = this.$menu.find('.active').removeClass('active').attr('aria-selected', 'false');
             var prev = active.prev();
 
             if (!prev.length) {
@@ -434,7 +503,7 @@
                 prev = prev.prev();
             }
 
-            prev.addClass('active');
+            this._markActive(prev);
             // added for screen reader
             var newVal = this.updater(prev.data('value'));
             if (this.changeInputOnMove) {
@@ -666,8 +735,8 @@
 
         mouseenter: function (e) {
             this.mousedover = true;
-            this.$menu.find('.active').removeClass('active');
-            $(e.currentTarget).addClass('active');
+            this.$menu.find('.active').removeClass('active').attr('aria-selected', 'false');
+            this._markActive($(e.currentTarget));
         },
 
         mouseleave: function (e) {
@@ -690,15 +759,25 @@
 
         touchstart: function (e) {
             e.preventDefault();
-            this.$menu.find('.active').removeClass('active');
-            $(e.currentTarget).addClass('active');
+            this.$menu.find('.active').removeClass('active').attr('aria-selected', 'false');
+            this._markActive($(e.currentTarget));
         },
 
         touchend: function (e) {
             e.preventDefault();
             this.select();
             this.$element.focus();
+        },
+
+        /**
+         * Updates the ARIA Live Region designated for polite status updates,
+         * such as declaring when a search is too specific to return results.
+         * @param {string} [text] Text to update the status region to.
+         */
+        _setLiveStatus: function(text) {
+            this.$statusRegion.text(text);
         }
+
 
     };
 
@@ -751,14 +830,14 @@
         theme: "bootstrap3",
         themes: {
         bootstrap3: {
-            menu: '<ul class="typeahead dropdown-menu" role="listbox"></ul>',
-            item: '<li><a class="dropdown-item" href="#" role="option"></a></li>',
+            menu: '<ul class="typeahead dropdown-menu" role="listbox" aria-label="Search results"></ul>',
+            item: '<li role="option"><a class="dropdown-item" href="#"></a></li>',
             itemContentSelector: "a",
             headerHtml: '<li class="dropdown-header"></li>',
             headerDivider: '<li class="divider" role="separator"></li>'
         },
         bootstrap4: {
-            menu: '<div class="typeahead dropdown-menu" role="listbox"></div>',
+            menu: '<div class="typeahead dropdown-menu" role="listbox" aria-label="Search results"></div>',
             item: '<button class="dropdown-item" role="option"></button>',
             itemContentSelector: '.dropdown-item',
             headerHtml: '<h6 class="dropdown-header"></h6>',
