@@ -45,6 +45,14 @@
         return id;
     }
 
+    function plainText(htmlString) {
+        const $html = $('<div></div>').html(htmlString);
+        // ensure we have a space between common block level elements,
+        // or else words can run together
+        $html.find('div,p,section,h1,h2,h3,h4,h5,h6').append(' ');
+        return $html.text();
+    }
+
     /* TYPEAHEAD PUBLIC CLASS DEFINITION
      * ================================= */
 
@@ -415,7 +423,7 @@
                     var text = self.displayText(item);
                     var itemTitle = self.itemTitle(item);
                     // try item title, fall back to displayText (stripping any markup)
-                    var ariaLabel = itemTitle || $('<div></div>').html(text).text();
+                    var ariaLabel = itemTitle || plainText(text);
                     i = $(that.options.item || that.theme.item).data('value', item);
                     i.find(that.options.itemContentSelector || that.theme.itemContentSelector)
                         .addBack(that.options.itemContentSelector || that.theme.itemContentSelector)
