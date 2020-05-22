@@ -416,12 +416,13 @@
                     i = $(that.options.item || that.theme.item).data('value', item);
                     i.find(that.options.itemContentSelector || that.theme.itemContentSelector)
                         .addBack(that.options.itemContentSelector || that.theme.itemContentSelector)
+                        .attr('aria-label', text) // highlighted text can get... interesting pronunciation
                         .html(that.highlighter(text, item));
                     if(that.options.followLinkOnSelect) {
                         i.find('a').attr('href', self.itemLink(item));
                     }
-                    i.attr('aria-label', text);
                     i.find('a').attr('title', self.itemTitle(item));
+
                     if (text == self.$element.val()) {
                         self._markActive(i);
                         self.$element.data('active', item);
