@@ -46,7 +46,7 @@
     }
 
     function plainText(htmlString) {
-        const $html = $('<div></div>').html(htmlString);
+        var $html = $('<div></div>').html(htmlString);
         // ensure we have a space between common block level elements,
         // or else words can run together
         $html.find('div,p,section,h1,h2,h3,h4,h5,h6').append(' ');
