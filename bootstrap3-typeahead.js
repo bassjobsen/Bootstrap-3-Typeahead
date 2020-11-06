@@ -58,6 +58,7 @@
 
     var Typeahead = function (element, options) {
         this.$element = $(element);
+        this.$parent = this.$element.parent();
         this.options = $.extend({}, Typeahead.defaults, options);
         this.matcher = this.options.matcher || this.matcher;
         this.sorter = this.options.sorter || this.sorter;
@@ -98,7 +99,7 @@
         });
         this.$element.after(this.$statusRegion);
 
-        this.$element.attr({
+        this.$parent.attr({
             'role': 'combobox',
             'aria-autocomplete': 'both',
             'aria-haspopup': 'listbox'
@@ -223,8 +224,8 @@
             }
 
             this.shown = true;
-            this.$element.attr('aria-expanded', 'true');
-            this.$element.attr('aria-owns', getOrGenId(element[0]));
+            this.$parent.attr('aria-expanded', 'true');
+            this.$parent.attr('aria-owns', getOrGenId(element[0]));
             return this;
         },
 
@@ -232,8 +233,8 @@
             this.$menu.hide();
             this.prevItems = [];
             this.shown = false;
-            this.$element.attr('aria-expanded', 'false');
-            this.$element.attr('aria-activedescendant', null);
+            this.$parent.attr('aria-expanded', 'false');
+            this.$parent.attr('aria-activedescendant', null);
             return this;
         },
 
@@ -793,17 +794,17 @@
 
     $.fn.typeahead = function (option) {
         var arg = arguments;
-        if (typeof option == 'string' && option == 'getActive') {
+        if (typeof option === 'string' && option === 'getActive') {
             return this.data('active');
         }
         return this.each(function () {
             var $this = $(this);
             var data = $this.data('typeahead');
-            var options = typeof option == 'object' && option;
+            var options = typeof option === 'object' && option;
             if (!data) {
                 $this.data('typeahead', (data = new Typeahead(this, options)));
             }
-            if (typeof option == 'string' && data[option]) {
+            if (typeof option === 'string' && data[option]) {
                 if (arg.length > 1) {
                     data[option].apply(data, Array.prototype.slice.call(arg, 1));
                 } else {
