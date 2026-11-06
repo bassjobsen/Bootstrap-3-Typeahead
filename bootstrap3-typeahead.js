@@ -634,16 +634,52 @@
                 // This is for IE that blurs the input when user clicks on scroll.
                 // We set the focus back on the input and prevent the lookup to occur again
                 this.skipShowHintOnFocus = true;
-                this.$element.focus();
+                this.focusElement();
                 this.mouseddown = false;
+            }
+        },
+
+        // Focus the input without scrolling its scroll container (a modal, for example).
+        // A plain focus() scrolls the container back to the input, which moves the menu
+        // items under the pointer before the click is completed, so the wrong item can
+        // be selected.
+        focusElement: function () {
+            var element = this.$element[0];
+            if (!element || typeof element.focus !== 'function') {
+                return;
+            }
+            try {
+                element.focus({ preventScroll: true });
+            } catch (err) {
+                this.$element.focus();
             }
         },
 
         click: function (e) {
             e.preventDefault();
             this.skipShowHintOnFocus = true;
+            // Scrolling the menu doesn't fire mouseenter, so .active can still point to the
+            // item highlighted before the menu was scrolled. The menu can also shift while the
+            // click is in progress. Select the item the mouse was pressed on (or the clicked
+            // one) instead of relying on the stale .active item.
+            var itemTagName = $(this.options.item || this.theme.item).prop('tagName');
+            var $item = $();
+            var pressedValue = this.pressedValue;
+            this.pressedValue = null;
+            if (typeof pressedValue !== 'undefined' && pressedValue !== null) {
+                $item = this.$menu.find(itemTagName).filter(function () {
+                    return $(this).data('value') === pressedValue;
+                });
+            }
+            if (!$item.length) {
+                $item = $(e.target).closest(itemTagName);
+            }
+            if ($item.length && typeof $item.data('value') !== 'undefined') {
+                this.$menu.find('.active').removeClass('active');
+                $item.addClass('active');
+            }
             this.select();
-            this.$element.focus();
+            this.focusElement();
             this.hide();
         },
 
@@ -665,6 +701,10 @@
          */
         mousedown: function (e) {
             this.mouseddown = true;
+            // Remember the item under the pointer; the menu may shift before the click ends.
+            var itemTagName = $(this.options.item || this.theme.item).prop('tagName');
+            var $pressedItem = $(e.target).closest(itemTagName);
+            this.pressedValue = ($pressedItem.length && typeof $pressedItem.data('value') !== 'undefined') ? $pressedItem.data('value') : null;
             this.$menu.one('mouseup', function (e) {
                 // IE won't fire this, but FF and Chrome will so we reset our flag for them here
                 this.mouseddown = false;
@@ -680,7 +720,7 @@
         touchend: function (e) {
             e.preventDefault();
             this.select();
-            this.$element.focus();
+            this.focusElement();
         }
 
     };
